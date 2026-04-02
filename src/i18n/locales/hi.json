@@ -1,0 +1,115 @@
+{
+  "common": {
+    "appName": "KisanSeva",
+    "tagline": "किसानों को तकनीक से सशक्त बनाना",
+    "close": "बंद करें",
+    "cancel": "रद्द करें",
+    "save": "सहेजें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "loading": "लोड हो रहा है...",
+    "noResults": "कोई परिणाम नहीं मिला",
+    "back": "वापस",
+    "submit": "जमा करें",
+    "search": "खोजें"
+  },
+  "nav": {
+    "home": "होम",
+    "login": "लॉगिन",
+    "register": "रजिस्टर",
+    "logout": "लॉगआउट",
+    "notifications": "सूचनाएं",
+    "appointments": "परामर्श"
+  },
+  "landing": {
+    "heroTitle": "KisanSeva",
+    "heroSubtitle": "किसानों को तकनीक से सशक्त बनाना",
+    "heroDescription": "कृषि विशेषज्ञों से जुड़ें, व्यक्तिगत फसल सलाह प्राप्त करें, मौसम पूर्वानुमान देखें, और अपने खेत का कुशलतापूर्वक प्रबंधन करें — सब एक ही मंच पर।",
+    "getStarted": "शुरू करें",
+    "learnMore": "और जानें",
+    "features": "हमारी सेवाएं",
+    "feature1Title": "विशेषज्ञ परामर्श",
+    "feature1Desc": "फसल प्रबंधन, कीट नियंत्रण और मिट्टी स्वास्थ्य पर व्यक्तिगत मार्गदर्शन के लिए प्रमाणित कृषि विशेषज्ञों से जुड़ें।",
+    "feature2Title": "मौसम और फसल सलाह",
+    "feature2Desc": "अपने क्षेत्र और फसलों के अनुसार रीयल-टाइम मौसम अपडेट और AI-संचालित फसल सलाह प्राप्त करें।",
+    "feature3Title": "मंडी भाव",
+    "feature3Desc": "सूचित बिक्री निर्णय लेने के लिए देश भर की मंडियों से लाइव बाजार भाव ट्रैक करें।",
+    "feature4Title": "समुदाय मंच",
+    "feature4Desc": "ज्ञान साझा करने, प्रश्न पूछने और एक-दूसरे के अनुभवों से सीखने के लिए किसानों के एक जीवंत समुदाय से जुड़ें।"
+  },
+  "auth": {
+    "loginTitle": "वापस स्वागत है",
+    "loginSubtitle": "अपने KisanSeva खाते में साइन इन करें",
+    "registerTitle": "खाता बनाएं",
+    "registerSubtitle": "कृषि विशेषज्ञों से जुड़ने के लिए KisanSeva में शामिल हों",
+    "email": "ईमेल पता",
+    "password": "पासवर्ड",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "firstName": "पहला नाम",
+    "lastName": "अंतिम नाम",
+    "phone": "फ़ोन नंबर",
+    "role": "मैं हूं",
+    "roleFarmer": "किसान",
+    "roleExpert": "कृषि विशेषज्ञ",
+    "loginButton": "साइन इन करें",
+    "registerButton": "खाता बनाएं",
+    "noAccount": "खाता नहीं है?",
+    "hasAccount": "पहले से खाता है?",
+    "signUp": "साइन अप करें",
+    "signIn": "साइन इन करें",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "emailRequired": "ईमेल आवश्यक है",
+    "passwordRequired": "पासवर्ड आवश्यक है",
+    "firstNameRequired": "पहला नाम आवश्यक है",
+    "lastNameRequired": "अंतिम नाम आवश्यक है",
+    "phoneRequired": "फ़ोन नंबर आवश्यक है",
+    "passwordMismatch": "पासवर्ड मेल नहीं खाते",
+    "passwordMinLength": "पासवर्ड कम से कम 6 अक्षर का होना चाहिए"
+  },
+  "sidebar": {
+    "dashboard": "डैशबोर्ड",
+    "consultations": "मेरे परामर्श",
+    "cropAdvisory": "फसल सलाह",
+    "mandiPrices": "मंडी भाव",
+    "myFarm": "मेरा खेत",
+    "community": "समुदाय",
+    "myProfile": "मेरी प्रोफ़ाइल",
+    "settings": "सेटिंग्स",
+    "expertConsultations": "परामर्श",
+    "manageSchedule": "शेड्यूल प्रबंधित करें"
+  },
+  "farmer": {
+    "dashboard": {
+      "welcome": "वापस स्वागत है",
+      "subtitle": "आज आपके खेत पर क्या हो रहा है",
+      "upcomingConsultations": "आगामी परामर्श",
+      "recentAdvisories": "हाल की सलाह",
+      "weatherToday": "आज का मौसम",
+      "quickActions": "त्वरित कार्य"
+    }
+  },
+  "expert": {
+    "dashboard": {
+      "welcome": "वापस स्वागत है",
+      "subtitle": "अपने परामर्श प्रबंधित करें और किसानों की मदद करें",
+      "todayConsultations": "आज के परामर्श",
+      "pendingQueries": "लंबित प्रश्न",
+      "totalFarmers": "कुल किसानों की मदद की"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "welcome": "एडमिन डैशबोर्ड",
+      "subtitle": "KisanSeva प्लेटफ़ॉर्म प्रबंधित करें",
+      "totalUsers": "कुल उपयोगकर्ता",
+      "totalFarmers": "कुल किसान",
+      "totalExperts": "कुल विशेषज्ञ",
+      "activeConsultations": "सक्रिय परामर्श"
+    }
+  },
+  "notFound": {
+    "title": "पृष्ठ नहीं मिला",
+    "description": "आप जिस पृष्ठ की तलाश कर रहे हैं वह मौजूद नहीं है या स्थानांतरित कर दिया गया है।",
+    "goHome": "होम पर जाएं"
+  }
+}

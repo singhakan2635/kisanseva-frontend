@@ -1,0 +1,115 @@
+{
+  "common": {
+    "appName": "KisanSeva",
+    "tagline": "Empowering Farmers with Technology",
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "back": "Back",
+    "submit": "Submit",
+    "search": "Search"
+  },
+  "nav": {
+    "home": "Home",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "notifications": "Notifications",
+    "appointments": "Consultations"
+  },
+  "landing": {
+    "heroTitle": "KisanSeva",
+    "heroSubtitle": "Empowering Farmers with Technology",
+    "heroDescription": "Connect with agricultural experts, get personalized crop advice, access weather forecasts, and manage your farm efficiently — all in one platform.",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More",
+    "features": "Our Services",
+    "feature1Title": "Expert Consultation",
+    "feature1Desc": "Connect with certified agricultural experts for personalized guidance on crop management, pest control, and soil health.",
+    "feature2Title": "Weather & Crop Advisory",
+    "feature2Desc": "Get real-time weather updates and AI-powered crop advisories tailored to your region and crops.",
+    "feature3Title": "Mandi Prices",
+    "feature3Desc": "Track live market prices from mandis across the country to make informed selling decisions.",
+    "feature4Title": "Community Forum",
+    "feature4Desc": "Join a vibrant community of farmers to share knowledge, ask questions, and learn from each other's experiences."
+  },
+  "auth": {
+    "loginTitle": "Welcome Back",
+    "loginSubtitle": "Sign in to your KisanSeva account",
+    "registerTitle": "Create Account",
+    "registerSubtitle": "Join KisanSeva to connect with agricultural experts",
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone Number",
+    "role": "I am a",
+    "roleFarmer": "Farmer",
+    "roleExpert": "Agricultural Expert",
+    "loginButton": "Sign In",
+    "registerButton": "Create Account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "forgotPassword": "Forgot Password?",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "phoneRequired": "Phone number is required",
+    "passwordMismatch": "Passwords do not match",
+    "passwordMinLength": "Password must be at least 6 characters"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "consultations": "My Consultations",
+    "cropAdvisory": "Crop Advisory",
+    "mandiPrices": "Mandi Prices",
+    "myFarm": "My Farm",
+    "community": "Community",
+    "myProfile": "My Profile",
+    "settings": "Settings",
+    "expertConsultations": "Consultations",
+    "manageSchedule": "Manage Schedule"
+  },
+  "farmer": {
+    "dashboard": {
+      "welcome": "Welcome back",
+      "subtitle": "Here is what is happening on your farm today",
+      "upcomingConsultations": "Upcoming Consultations",
+      "recentAdvisories": "Recent Advisories",
+      "weatherToday": "Weather Today",
+      "quickActions": "Quick Actions"
+    }
+  },
+  "expert": {
+    "dashboard": {
+      "welcome": "Welcome back",
+      "subtitle": "Manage your consultations and help farmers",
+      "todayConsultations": "Today's Consultations",
+      "pendingQueries": "Pending Queries",
+      "totalFarmers": "Total Farmers Helped"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "welcome": "Admin Dashboard",
+      "subtitle": "Manage the KisanSeva platform",
+      "totalUsers": "Total Users",
+      "totalFarmers": "Total Farmers",
+      "totalExperts": "Total Experts",
+      "activeConsultations": "Active Consultations"
+    }
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "goHome": "Go to Home"
+  }
+}
