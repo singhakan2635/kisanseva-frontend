@@ -9,6 +9,9 @@ import { LandingPage } from '@/pages/public/LandingPage';
 import { LoginPage } from '@/pages/public/LoginPage';
 import { RegisterPage } from '@/pages/public/RegisterPage';
 import { NotFoundPage } from '@/pages/public/NotFoundPage';
+import { PrivacyPolicyPage } from '@/pages/public/PrivacyPolicyPage';
+import { TermsOfServicePage } from '@/pages/public/TermsOfServicePage';
+import { DataDeletionPage } from '@/pages/public/DataDeletionPage';
 
 // Farmer pages — lazy loaded
 const FarmerDashboard = lazy(() => import('@/pages/farmer/FarmerDashboard').then(m => ({ default: m.FarmerDashboard })));
@@ -44,6 +47,9 @@ export function AppRouter() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+          <Route path="/data-deletion" element={<DataDeletionPage />} />
 
           {/* Farmer routes */}
           <Route element={<ProtectedRoute allowedRoles={['farmer']} />}>
