@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, type FormEvent } from 'react';
+import { useState, useRef, useCallback, useEffect, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
@@ -47,8 +47,16 @@ export function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [resendTimer, setResendTimer] = useState(0);
 
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Resend countdown timer
+  useEffect(() => {
+    if (resendTimer <= 0) return;
+    const interval = setInterval(() => setResendTimer((t) => t - 1), 1000);
+    return () => clearInterval(interval);
+  }, [resendTimer]);
   const l = LABELS[language] || LABELS.hi;
 
   /* ─── Step 1: Language selection ─── */
@@ -72,6 +80,7 @@ export function RegisterPage() {
       // For now, simulate OTP send
       await new Promise((r) => setTimeout(r, 800));
       setOtpSent(true);
+      setResendTimer(30);
       addToast({ type: 'success', title: 'OTP भेजा गया / OTP sent' });
       setTimeout(() => otpRefs.current[0]?.focus(), 100);
     } catch (err) {
@@ -290,11 +299,43 @@ export function RegisterPage() {
                     </div>
                   )}
 
+                  {/* Resend OTP */}
+                  <div className="text-center">
+                    {resendTimer > 0 ? (
+                      <p className="text-sm text-gray-400">
+                        Resend OTP in <span className="font-semibold text-gray-600">{resendTimer}s</span>
+                      </p>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          setOtp(Array(OTP_LENGTH).fill(''));
+                          setIsLoading(true);
+                          try {
+                            await new Promise((r) => setTimeout(r, 800));
+                            setResendTimer(30);
+                            addToast({ type: 'success', title: 'OTP दोबारा भेजा / OTP resent' });
+                            otpRefs.current[0]?.focus();
+                          } catch (err) {
+                            addToast({ type: 'error', title: friendlyError(err) });
+                          } finally {
+                            setIsLoading(false);
+                          }
+                        }}
+                        disabled={isLoading}
+                        className="text-sm text-primary-700 font-semibold hover:text-primary-800 underline underline-offset-2 py-2"
+                      >
+                        🔄 OTP दोबारा भेजें / Resend OTP
+                      </button>
+                    )}
+                  </div>
+
                   <button
                     type="button"
                     onClick={() => {
                       setOtpSent(false);
                       setOtp(Array(OTP_LENGTH).fill(''));
+                      setResendTimer(0);
                     }}
                     className="w-full text-sm text-gray-500 hover:text-gray-700 py-2"
                   >
