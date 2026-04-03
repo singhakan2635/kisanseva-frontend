@@ -76,7 +76,13 @@
     "myProfile": "मेरी प्रोफ़ाइल",
     "settings": "सेटिंग्स",
     "expertConsultations": "परामर्श",
-    "manageSchedule": "शेड्यूल प्रबंधित करें"
+    "manageSchedule": "शेड्यूल प्रबंधित करें",
+    "users": "उपयोगकर्ता",
+    "diagnoses": "निदान",
+    "database": "डेटाबेस",
+    "schemes": "योजनाएं",
+    "scan": "स्कैन",
+    "history": "इतिहास"
   },
   "farmer": {
     "dashboard": {

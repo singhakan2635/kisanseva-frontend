@@ -1,40 +1,40 @@
-import { useState, type FormEvent } from 'react';
+import { useState, useRef, useCallback, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
-import { Input } from '@/components/common/Input';
-import { Button } from '@/components/common/Button';
 import { friendlyError } from '@/utils/firebaseErrors';
 
+const OTP_LENGTH = 6;
+
 export function LoginPage() {
-  const { t } = useTranslation();
   const { login } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(''));
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [phoneError, setPhoneError] = useState('');
 
-  const validate = (): boolean => {
-    const newErrors: typeof errors = {};
-    if (!email.trim()) newErrors.email = t('auth.emailRequired');
-    if (!password) newErrors.password = t('auth.passwordRequired');
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const handleSubmit = async (e: FormEvent) => {
+  /* ─── Send OTP ─── */
+  const handleSendOtp = async (e: FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
-
+    const cleaned = phone.replace(/\D/g, '');
+    if (cleaned.length !== 10) {
+      setPhoneError('कृपया 10 अंकों का नंबर डालें / Enter valid 10-digit number');
+      return;
+    }
+    setPhoneError('');
     setIsLoading(true);
     try {
-      await login(email, password);
-      addToast({ type: 'success', title: 'Welcome back!' });
-      navigate('/farmer');
+      // TODO: call backend /auth/send-otp with +91<phone>
+      await new Promise((r) => setTimeout(r, 800));
+      setOtpSent(true);
+      addToast({ type: 'success', title: 'OTP भेजा गया / OTP sent' });
+      setTimeout(() => otpRefs.current[0]?.focus(), 100);
     } catch (err) {
       addToast({ type: 'error', title: friendlyError(err) });
     } finally {
@@ -42,54 +42,166 @@ export function LoginPage() {
     }
   };
 
+  /* ─── OTP input handling ─── */
+  const handleOtpChange = (idx: number, value: string) => {
+    if (!/^\d*$/.test(value)) return;
+    const next = [...otp];
+    next[idx] = value.slice(-1);
+    setOtp(next);
+
+    if (value && idx < OTP_LENGTH - 1) {
+      otpRefs.current[idx + 1]?.focus();
+    }
+
+    if (next.every((d) => d !== '') && next.join('').length === OTP_LENGTH) {
+      handleVerifyOtp(next.join(''));
+    }
+  };
+
+  const handleOtpKeyDown = (idx: number, key: string) => {
+    if (key === 'Backspace' && !otp[idx] && idx > 0) {
+      otpRefs.current[idx - 1]?.focus();
+    }
+  };
+
+  const handleOtpPaste = useCallback(
+    (e: React.ClipboardEvent) => {
+      e.preventDefault();
+      const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, OTP_LENGTH);
+      if (!pasted) return;
+      const next = [...otp];
+      for (let i = 0; i < pasted.length; i++) {
+        next[i] = pasted[i];
+      }
+      setOtp(next);
+      if (pasted.length === OTP_LENGTH) {
+        handleVerifyOtp(pasted);
+      } else {
+        otpRefs.current[pasted.length]?.focus();
+      }
+    },
+    [otp], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+
+  /* ─── Verify OTP ─── */
+  const handleVerifyOtp = async (code: string) => {
+    setIsLoading(true);
+    try {
+      // Login with phone + OTP
+      await login(`${phone}@kisanseva.phone`, code);
+      addToast({ type: 'success', title: 'स्वागत है! / Welcome back!' });
+      navigate('/farmer');
+    } catch (err) {
+      addToast({ type: 'error', title: friendlyError(err) });
+      setOtp(Array(OTP_LENGTH).fill(''));
+      otpRefs.current[0]?.focus();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl shadow-lg shadow-primary-500/25 mx-auto mb-4 bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-bold text-lg sm:text-xl">
-            KS
+    <div className="min-h-screen bg-earth-50 flex flex-col">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 pb-12">
+        <div className="w-full max-w-md">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="text-4xl mb-3">🌾</div>
+            <h1 className="text-2xl font-bold text-gray-900">लॉगिन करें</h1>
+            <p className="text-sm text-gray-500 mt-1">Login</p>
           </div>
-          <h1 className="text-lg sm:text-2xl font-bold text-gray-900">{t('auth.loginTitle')}</h1>
-          <p className="text-gray-500 mt-1">{t('auth.loginSubtitle')}</p>
-        </div>
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl shadow-gray-200/50 p-4 sm:p-8 border border-white/40">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              label={t('auth.email')}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              error={errors.email}
-              placeholder="your@email.com"
-              autoComplete="email"
-            />
-            <Input
-              label={t('auth.password')}
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              error={errors.password}
-              placeholder="Enter your password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              isLoading={isLoading}
-              className="w-full"
-              size="lg"
-            >
-              {t('auth.loginButton')}
-            </Button>
-          </form>
+          {!otpSent ? (
+            /* ─── Phone input ─── */
+            <form onSubmit={handleSendOtp} className="space-y-4">
+              <div>
+                <div className="flex items-center gap-2 bg-white border-2 border-earth-200 rounded-xl px-4 focus-within:border-primary-500 transition-colors">
+                  <span className="text-lg text-gray-500 font-medium select-none">
+                    +91
+                  </span>
+                  <input
+                    type="tel"
+                    inputMode="numeric"
+                    autoFocus
+                    value={phone}
+                    onChange={(e) => {
+                      setPhone(e.target.value.replace(/\D/g, '').slice(0, 10));
+                      setPhoneError('');
+                    }}
+                    placeholder="98765 43210"
+                    className="flex-1 min-h-[56px] text-xl font-medium text-gray-900 bg-transparent outline-none placeholder:text-gray-300"
+                    maxLength={10}
+                  />
+                </div>
+                {phoneError && (
+                  <p className="text-sm text-red-600 mt-1.5 px-1">{phoneError}</p>
+                )}
+              </div>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
-            {t('auth.noAccount')}{' '}
-            <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
-              {t('auth.signUp')}
-            </Link>
-          </p>
+              <button
+                type="submit"
+                disabled={isLoading || phone.replace(/\D/g, '').length < 10}
+                className="w-full min-h-[56px] bg-primary-700 hover:bg-primary-800 disabled:bg-primary-300 text-white text-lg font-semibold rounded-2xl transition-all duration-200 flex items-center justify-center gap-2"
+              >
+                {isLoading ? (
+                  <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : null}
+                OTP भेजें / Send OTP
+              </button>
+            </form>
+          ) : (
+            /* ─── OTP input ─── */
+            <div className="space-y-4">
+              <p className="text-center text-sm text-gray-600">
+                OTP दर्ज करें — +91 {phone}
+              </p>
+
+              <div className="flex items-center justify-center gap-2" onPaste={handleOtpPaste}>
+                {otp.map((digit, idx) => (
+                  <input
+                    key={idx}
+                    ref={(el) => { otpRefs.current[idx] = el; }}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleOtpChange(idx, e.target.value)}
+                    onKeyDown={(e) => handleOtpKeyDown(idx, e.key)}
+                    className="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold bg-white border-2 border-earth-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
+                  />
+                ))}
+              </div>
+
+              {isLoading && (
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+                  <span className="w-4 h-4 border-2 border-gray-300 border-t-primary-500 rounded-full animate-spin" />
+                  Verifying...
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={() => {
+                  setOtpSent(false);
+                  setOtp(Array(OTP_LENGTH).fill(''));
+                }}
+                className="w-full text-sm text-gray-500 hover:text-gray-700 py-2"
+              >
+                नंबर बदलें / Change number
+              </button>
+            </div>
+          )}
         </div>
+      </div>
+
+      {/* Bottom link */}
+      <div className="pb-6 text-center">
+        <p className="text-sm text-gray-500">
+          नया खाता बनाएं?{' '}
+          <Link to="/register" className="text-primary-700 font-semibold underline underline-offset-2">
+            रजिस्टर करें / Register
+          </Link>
+        </p>
       </div>
     </div>
   );

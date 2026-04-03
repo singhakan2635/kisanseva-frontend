@@ -76,7 +76,13 @@
     "myProfile": "My Profile",
     "settings": "Settings",
     "expertConsultations": "Consultations",
-    "manageSchedule": "Manage Schedule"
+    "manageSchedule": "Manage Schedule",
+    "users": "Users",
+    "diagnoses": "Diagnoses",
+    "database": "Database",
+    "schemes": "Schemes",
+    "scan": "Scan",
+    "history": "History"
   },
   "farmer": {
     "dashboard": {

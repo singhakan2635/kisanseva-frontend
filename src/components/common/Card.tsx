@@ -16,15 +16,15 @@ interface CardProps {
 
 const variantClasses: Record<CardVariant, string> = {
   default:
-    'bg-white/80 backdrop-blur-sm shadow-sm border border-white/40 hover:shadow-md transition-all duration-200',
+    'bg-white shadow-md shadow-earth-200/50 border border-earth-100 hover:shadow-lg hover:bg-earth-50/30 transition-all duration-200',
   flat:
-    'bg-white/50 border border-gray-100/60',
+    'bg-white border border-earth-100',
   elevated:
-    'bg-white/90 backdrop-blur-sm shadow-md border border-white/50 hover:shadow-lg transition-all duration-200',
+    'bg-white shadow-lg shadow-earth-200/60 border border-earth-100 hover:shadow-xl transition-all duration-200',
   outlined:
-    'bg-white/60 border border-gray-200 hover:border-primary-200 transition-all duration-200',
+    'bg-white border-2 border-earth-200 hover:border-primary-300 transition-all duration-200',
   status:
-    'bg-white/80 backdrop-blur-sm shadow-sm border border-white/40 hover:shadow-md transition-all duration-200',
+    'bg-white shadow-md shadow-earth-200/50 border border-earth-100 hover:shadow-lg transition-all duration-200',
 };
 
 export function Card({
@@ -42,23 +42,23 @@ export function Card({
 
   return (
     <div
-      className={`rounded-xl overflow-hidden ${variantClasses[variant]} ${statusBorder} ${className}`}
+      className={`rounded-2xl overflow-hidden ${variantClasses[variant]} ${statusBorder} ${className}`}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } } : undefined}
     >
       {(title || subtitle) && (
-        <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-gray-100/50">
-          {title && <h3 className="text-base font-semibold text-gray-900">{title}</h3>}
-          {subtitle && <p className="mt-1 text-sm text-gray-500">{subtitle}</p>}
+        <div className="px-5 py-4 sm:px-6 sm:py-5 border-b border-earth-100">
+          {title && <h3 className="text-lg font-semibold text-earth-900">{title}</h3>}
+          {subtitle && <p className="mt-1 text-base text-earth-500">{subtitle}</p>}
         </div>
       )}
 
-      <div className={noPadding ? '' : 'px-4 py-4 sm:px-6 sm:py-5'}>{children}</div>
+      <div className={noPadding ? '' : 'px-5 py-5 sm:px-6 sm:py-6'}>{children}</div>
 
       {footer && (
-        <div className="px-4 py-3 sm:px-6 bg-white/50 border-t border-gray-100/50">{footer}</div>
+        <div className="px-5 py-4 sm:px-6 bg-earth-50 border-t border-earth-100">{footer}</div>
       )}
     </div>
   );

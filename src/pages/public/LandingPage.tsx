@@ -1,135 +1,96 @@
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Sprout, CloudSun, TrendingUp, Users, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/common/Button';
-import type { LucideIcon } from 'lucide-react';
-
-interface FeatureCardProps {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-  color: string;
-}
-
-function FeatureCard({ icon: Icon, title, description, color }: FeatureCardProps) {
-  return (
-    <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/40 shadow-sm hover:shadow-md transition-all duration-300 group">
-      <div className={`w-12 h-12 rounded-xl ${color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-        <Icon className="w-6 h-6 text-white" />
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
-    </div>
-  );
-}
 
 export function LandingPage() {
   const navigate = useNavigate();
-  const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50/40">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100/50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-bold text-xs">
-              KS
-            </div>
-            <span className="text-lg font-bold text-gray-900">KisanSeva</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" onClick={() => navigate('/login')}>
-              {t('nav.login')}
-            </Button>
-            <Button variant="primary" size="sm" onClick={() => navigate('/register')}>
-              {t('nav.register')}
-            </Button>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-earth-50 flex flex-col">
+      {/* Hero */}
+      <section className="flex-1 flex flex-col items-center justify-center px-4 py-12 text-center">
+        <div className="text-6xl mb-4">🌾</div>
+        <h1 className="text-4xl sm:text-5xl font-bold text-primary-800 mb-2">
+          किसानसेवा
+        </h1>
+        <p className="text-lg text-primary-700 font-medium mb-1">KisanSeva</p>
+        <p className="text-base sm:text-lg text-gray-700 mt-4 max-w-md leading-relaxed">
+          अपनी फसल की बीमारी पहचानें, इलाज पाएं
+        </p>
+        <p className="text-sm text-gray-500 mt-1 max-w-md">
+          Identify crop disease, get treatment
+        </p>
 
-      {/* Hero Section */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="text-center max-w-3xl mx-auto animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-100 text-primary-700 text-sm font-medium mb-6">
-            <Sprout className="w-4 h-4" />
-            {t('common.tagline')}
-          </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            {t('landing.heroTitle')}
-          </h1>
-          <p className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed">
-            {t('landing.heroDescription')}
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={() => navigate('/register')}
-              className="w-full sm:w-auto"
-            >
-              {t('landing.getStarted')}
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => {
-                document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="w-full sm:w-auto"
-            >
-              {t('landing.learnMore')}
-            </Button>
-          </div>
-        </div>
+        <button
+          onClick={() => navigate('/register')}
+          className="mt-8 w-full max-w-xs min-h-[56px] bg-primary-700 hover:bg-primary-800 text-white text-lg font-semibold rounded-2xl shadow-lg shadow-primary-500/25 transition-all duration-200 active:scale-[0.98]"
+        >
+          शुरू करें / Get Started
+        </button>
+
+        <p className="mt-4 text-sm text-gray-600">
+          पहले से खाता है?{' '}
+          <button
+            onClick={() => navigate('/login')}
+            className="text-primary-700 font-semibold underline underline-offset-2"
+          >
+            लॉगिन करें
+          </button>
+        </p>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="text-center mb-12 animate-fade-in-up">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">{t('landing.features')}</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            {t('landing.heroSubtitle')}
-          </p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <FeatureCard
-            icon={Sprout}
-            title={t('landing.feature1Title')}
-            description={t('landing.feature1Desc')}
-            color="bg-gradient-to-br from-primary-500 to-primary-600"
+      {/* Features */}
+      <section className="px-4 pb-12 max-w-md mx-auto w-full">
+        <div className="grid gap-4">
+          <FeatureItem
+            emoji="📸"
+            titleHi="फोटो भेजें"
+            subtitleHi="बीमारी पहचानें"
+            titleEn="Send photo, identify disease"
           />
-          <FeatureCard
-            icon={CloudSun}
-            title={t('landing.feature2Title')}
-            description={t('landing.feature2Desc')}
-            color="bg-gradient-to-br from-blue-500 to-blue-600"
+          <FeatureItem
+            emoji="💊"
+            titleHi="इलाज और दवाई जानें"
+            subtitleHi="सही उपचार पाएं"
+            titleEn="Get treatment & medicine info"
           />
-          <FeatureCard
-            icon={TrendingUp}
-            title={t('landing.feature3Title')}
-            description={t('landing.feature3Desc')}
-            color="bg-gradient-to-br from-accent-500 to-accent-600"
-          />
-          <FeatureCard
-            icon={Users}
-            title={t('landing.feature4Title')}
-            description={t('landing.feature4Desc')}
-            color="bg-gradient-to-br from-orange-500 to-orange-600"
+          <FeatureItem
+            emoji="🌐"
+            titleHi="हिन्दी और 10+ भाषाओं में"
+            subtitleHi="अपनी भाषा में"
+            titleEn="Hindi & 10+ languages"
           />
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 bg-white/50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
-          <p className="text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} KisanSeva. All rights reserved.
-          </p>
-        </div>
+      <footer className="py-6 text-center border-t border-earth-200 bg-white/50">
+        <p className="text-xs text-gray-400">
+          &copy; {new Date().getFullYear()} KisanSeva
+        </p>
       </footer>
+    </div>
+  );
+}
+
+function FeatureItem({
+  emoji,
+  titleHi,
+  subtitleHi,
+  titleEn,
+}: {
+  emoji: string;
+  titleHi: string;
+  subtitleHi: string;
+  titleEn: string;
+}) {
+  return (
+    <div className="flex items-center gap-4 bg-white/80 rounded-xl px-4 py-3 border border-earth-200">
+      <span className="text-3xl flex-shrink-0">{emoji}</span>
+      <div>
+        <p className="text-sm font-semibold text-gray-900">
+          {titleHi} — {subtitleHi}
+        </p>
+        <p className="text-xs text-gray-500">{titleEn}</p>
+      </div>
     </div>
   );
 }
