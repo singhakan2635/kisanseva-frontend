@@ -30,7 +30,7 @@ app.use((_req, res, next) => {
       "font-src 'self' https://fonts.gstatic.com",
       "frame-src 'self' https://www.google.com https://www.recaptcha.net https://kisanseva-app.firebaseapp.com https://*.firebaseapp.com",
       "img-src 'self' data: blob: https://www.gstatic.com",
-      "connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebase.googleapis.com https://firebaseinstallations.googleapis.com https://www.google.com https://www.recaptcha.net",
+      `connect-src 'self' ${process.env.VITE_API_BASE_URL || process.env.API_BASE_URL || ''} https://kisanseva-backend-d6034e449591.herokuapp.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebase.googleapis.com https://firebaseinstallations.googleapis.com https://www.google.com https://www.recaptcha.net`,
       "object-src 'none'",
       "base-uri 'self'",
     ].join('; ')
