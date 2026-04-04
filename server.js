@@ -64,7 +64,7 @@ app.use(
 // ─── SPA fallback — serve index.html with runtime config ─────────────────────
 app.get('/{*splat}', (_req, res) => {
   const runtimeConfig = `<script>window.__RUNTIME_CONFIG__=${JSON.stringify({
-    API_BASE_URL: process.env.VITE_API_BASE_URL || '',
+    API_BASE_URL: process.env.VITE_API_BASE_URL || process.env.API_BASE_URL || '',
   })};</script>`;
 
   const html = indexTemplate.replace('</head>', `${runtimeConfig}</head>`);
