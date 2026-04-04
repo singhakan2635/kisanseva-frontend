@@ -15,7 +15,7 @@ const roleDashboardPath: Record<UserRole, string> = {
 
 const languages: { code: SupportedLanguage; label: string; short: string }[] = [
   { code: 'en', label: 'English', short: 'EN' },
-  { code: 'hi', label: 'हिन्दी', short: 'हि' },
+  { code: 'hi', label: '\u0939\u093F\u0928\u094D\u0926\u0940', short: '\u0939\u093F' },
 ];
 
 export function Navbar() {
@@ -56,21 +56,21 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 h-14 sm:h-16 bg-white/80 backdrop-blur-xl border-b border-earth-100 shadow-sm shadow-earth-200/20">
+    <header className="sticky top-0 z-30 h-14 sm:h-16 bg-white border-b border-earth-200">
       <div className="flex items-center justify-between h-full px-3 sm:px-4 lg:px-6">
-        {/* Left: Logo (always visible, especially on mobile where sidebar is gone) */}
+        {/* Left: Logo */}
         <button
           onClick={handleLogoClick}
           className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-xl p-1 min-h-[48px]"
         >
-          <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-md">
+          <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-primary-600 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-sm">
             KS
           </div>
           <div className="flex flex-col lg:hidden">
-            <span className="text-base sm:text-lg font-bold text-earth-900 leading-tight">
+            <span className="text-base sm:text-lg font-bold text-primary-700 leading-tight">
               KisanSeva
             </span>
-            <span className="text-[9px] sm:text-[10px] text-primary-500 font-medium leading-none -mt-0.5">
+            <span className="text-[9px] sm:text-[10px] text-earth-500 font-medium leading-none -mt-0.5">
               {t('common.tagline')}
             </span>
           </div>
@@ -104,7 +104,7 @@ export function Navbar() {
               </button>
 
               {langOpen && (
-                <div className="absolute right-0 top-full mt-1 bg-white/95 backdrop-blur-md rounded-xl shadow-xl border border-earth-100 py-1 min-w-[160px] z-50">
+                <div className="absolute right-0 top-full mt-1 bg-white rounded-xl shadow-md border border-earth-200 py-1 min-w-[160px] z-50">
                   {languages.map((lang) => (
                     <button
                       key={lang.code}

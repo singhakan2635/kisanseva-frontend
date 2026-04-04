@@ -44,7 +44,7 @@ export function Button({
   return (
     <button
       disabled={disabled || isLoading}
-      className={`inline-flex items-center justify-center gap-2.5 font-semibold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed min-w-[48px] hover:-translate-y-0.5 active:scale-[0.97] ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2.5 font-semibold rounded-2xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed min-w-[48px] active:scale-[0.97] ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       {...rest}
     >
       {isLoading && <Loader2 className="w-5 h-5 animate-spin" />}

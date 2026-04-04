@@ -16,15 +16,15 @@ interface CardProps {
 
 const variantClasses: Record<CardVariant, string> = {
   default:
-    'bg-white/80 backdrop-blur-sm shadow-lg shadow-earth-200/50 border border-earth-100 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300',
+    'bg-white shadow-sm border border-earth-200 hover:shadow-md transition-shadow duration-200',
   flat:
-    'bg-white/80 backdrop-blur-sm border border-earth-100',
+    'bg-white border border-earth-200',
   elevated:
-    'bg-white/80 backdrop-blur-sm shadow-xl shadow-earth-200/60 border border-earth-100 hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300',
+    'bg-white shadow-md border border-earth-200 hover:shadow-lg transition-shadow duration-200',
   outlined:
-    'bg-white/80 backdrop-blur-sm border-2 border-earth-200 hover:border-primary-300 transition-all duration-300',
+    'bg-white border-2 border-earth-200 hover:border-primary-300 transition-colors duration-200',
   status:
-    'bg-white/80 backdrop-blur-sm shadow-lg shadow-earth-200/50 border border-earth-100 hover:shadow-xl transition-all duration-300',
+    'bg-white shadow-sm border border-earth-200 hover:shadow-md transition-shadow duration-200',
 };
 
 export function Card({
@@ -49,7 +49,7 @@ export function Card({
       onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } } : undefined}
     >
       {(title || subtitle) && (
-        <div className="px-5 py-4 sm:px-6 sm:py-5 border-b border-earth-100">
+        <div className="px-5 py-4 sm:px-6 sm:py-5 border-b border-earth-200">
           {title && <h3 className="text-lg font-semibold text-earth-900">{title}</h3>}
           {subtitle && <p className="mt-1 text-base text-earth-500">{subtitle}</p>}
         </div>
@@ -58,7 +58,7 @@ export function Card({
       <div className={noPadding ? '' : 'px-5 py-5 sm:px-6 sm:py-6'}>{children}</div>
 
       {footer && (
-        <div className="px-5 py-4 sm:px-6 bg-earth-50/80 border-t border-earth-100">{footer}</div>
+        <div className="px-5 py-4 sm:px-6 bg-earth-50 border-t border-earth-200">{footer}</div>
       )}
     </div>
   );

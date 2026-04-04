@@ -1,67 +1,69 @@
 @import "tailwindcss";
 
 @theme {
-  /* PRIMARY: Soft Teal Green (nature, trust, calm) */
-  --color-primary-50: #F0FDFA;
-  --color-primary-100: #CCFBF1;
-  --color-primary-200: #99F6E4;
-  --color-primary-300: #5EEAD4;
-  --color-primary-400: #2DD4BF;
-  --color-primary-500: #14B8A6;
-  --color-primary-600: #0D9488;
-  --color-primary-700: #0F766E;
-  --color-primary-800: #115E59;
-  --color-primary-900: #134E4A;
-  --color-primary-950: #042F2E;
+  /* PRIMARY: Warm Brown (soil, earth, premium) */
+  --color-primary-50: #FAF6F1;
+  --color-primary-100: #F3EBE0;
+  --color-primary-200: #E6D4BF;
+  --color-primary-300: #D6B896;
+  --color-primary-400: #C49A6E;
+  --color-primary-500: #B07D4F;
+  --color-primary-600: #9A6840;
+  --color-primary-700: #7E5236;
+  --color-primary-800: #67432F;
+  --color-primary-900: #563929;
+  --color-primary-950: #2E1D14;
 
-  /* SECONDARY: Fresh Emerald Green */
-  --color-secondary-50: #ECFDF5;
-  --color-secondary-100: #D1FAE5;
-  --color-secondary-200: #A7F3D0;
-  --color-secondary-300: #6EE7B7;
-  --color-secondary-400: #34D399;
-  --color-secondary-500: #10B981;
-  --color-secondary-600: #059669;
-  --color-secondary-700: #047857;
-  --color-secondary-800: #065F46;
-  --color-secondary-900: #064E3B;
+  /* SECONDARY: Muted Sage Green (crops, nature — subtle, not bright) */
+  --color-secondary-50: #F4F6F0;
+  --color-secondary-100: #E6EBE0;
+  --color-secondary-200: #CDD8C1;
+  --color-secondary-300: #ADBF9A;
+  --color-secondary-400: #8CA474;
+  --color-secondary-500: #6F8A57;
+  --color-secondary-600: #587044;
+  --color-secondary-700: #465938;
+  --color-secondary-800: #3A4A2F;
+  --color-secondary-900: #313E29;
+  --color-secondary-950: #1A2114;
 
-  /* ACCENT: Warm Amber (subtle, not aggressive) */
-  --color-accent-50: #FFFBEB;
-  --color-accent-100: #FEF3C7;
-  --color-accent-200: #FDE68A;
-  --color-accent-300: #FCD34D;
-  --color-accent-400: #FBBF24;
-  --color-accent-500: #F59E0B;
-  --color-accent-600: #D97706;
-  --color-accent-700: #B45309;
-  --color-accent-800: #92400E;
-  --color-accent-900: #78350F;
+  /* ACCENT: Golden Wheat */
+  --color-accent-50: #FDFAF0;
+  --color-accent-100: #FAF0D5;
+  --color-accent-200: #F4DFA8;
+  --color-accent-300: #EDCA72;
+  --color-accent-400: #E5B544;
+  --color-accent-500: #D1A24E;
+  --color-accent-600: #B48530;
+  --color-accent-700: #966628;
+  --color-accent-800: #7B5226;
+  --color-accent-900: #674424;
+  --color-accent-950: #3A2210;
 
-  /* EARTH: Cool Neutrals (clean, modern) */
-  --color-earth-50: #FAFAF9;
-  --color-earth-100: #F5F5F4;
-  --color-earth-200: #E7E5E4;
-  --color-earth-300: #D6D3D1;
-  --color-earth-400: #A8A29E;
-  --color-earth-500: #78716C;
-  --color-earth-600: #57534E;
-  --color-earth-700: #44403C;
-  --color-earth-800: #292524;
-  --color-earth-900: #1C1917;
+  /* EARTH: Warm Neutrals (text, backgrounds) */
+  --color-earth-50: #FAFAF8;
+  --color-earth-100: #F5F3F0;
+  --color-earth-200: #E8E4DE;
+  --color-earth-300: #D6D0C7;
+  --color-earth-400: #B5AC9F;
+  --color-earth-500: #978C7D;
+  --color-earth-600: #7A6F62;
+  --color-earth-700: #5C5347;
+  --color-earth-800: #3B332A;
+  --color-earth-900: #2E1D14;
 
-  /* SIDEBAR: Deep Teal */
-  --color-sidebar-bg: #042F2E;
-  --color-sidebar-dark: #021F1E;
-  --color-sidebar-hover: #14B8A6;
-  --color-sidebar-active: #2DD4BF;
+  /* SIDEBAR: Deep Espresso */
+  --color-sidebar-bg: #2E1D14;
+  --color-sidebar-dark: #1E120B;
+  --color-sidebar-hover: #B07D4F;
+  --color-sidebar-active: #D6B896;
 
   /* SEVERITY */
-  --color-severity-healthy: #2D9F5D;
-  --color-severity-mild: #F5B731;
-  --color-severity-moderate: #E07A3A;
-  --color-severity-severe: #D84315;
-  --color-severity-critical: #B71C1C;
+  --color-severity-healthy: #6F8A57;
+  --color-severity-mild: #D1A24E;
+  --color-severity-moderate: #C47A3E;
+  --color-severity-severe: #C75B39;
+  --color-severity-critical: #9B2C2C;
 
   /* Animations */
   --animate-fade-in: fade-in 0.2s ease-out;
@@ -93,7 +95,7 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #FAFAF9 0%, #FFFFFF 50%, #F0FDFA 100%);
+  background: #FAFAF8;
 }
 
 h1, h2, h3, h4, h5, h6 {
