@@ -73,6 +73,7 @@ export function AppRouter() {
               <Route path="/farmer/market" element={<MarketPricesPage />} />
               <Route path="/farmer/schemes" element={<GovtSchemesPage />} />
               <Route path="/farmer/profile" element={<FarmerProfilePage />} />
+              <Route path="/farmer/diagnosis/result" element={<DiagnosisResultPage />} />
               <Route path="/farmer/diagnosis/:id" element={<DiagnosisResultPage />} />
             </Route>
             {/* ScanPage is full-screen, no MainLayout */}

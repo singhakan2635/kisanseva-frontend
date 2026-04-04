@@ -1,16 +1,13 @@
 import { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Camera, Image, RotateCcw, CheckCircle, X, Lightbulb } from 'lucide-react';
-import { apiClient } from '@/services/api';
-import type { ApiResponse } from '@/types';
+import { analyzePlantImage, saveDiagnosis, createThumbnail } from '@/services/diagnosisService';
+import { useToast } from '@/hooks/useToast';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-
-interface DiagnosisResponse {
-  _id: string;
-}
 
 export function ScanPage() {
   const navigate = useNavigate();
+  const { addToast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
@@ -54,21 +51,31 @@ export function ScanPage() {
     setError(null);
 
     try {
-      const formData = new FormData();
-      formData.append('image', imageFile);
+      const [result, thumbnail] = await Promise.all([
+        analyzePlantImage(imageFile),
+        createThumbnail(imageFile),
+      ]);
 
-      const res = await apiClient<ApiResponse<DiagnosisResponse>>('/diagnoses', {
-        method: 'POST',
-        body: formData,
+      // Save to local history
+      saveDiagnosis(result, thumbnail);
+
+      // Navigate to result page with diagnosis data + full image
+      navigate('/farmer/diagnosis/result', {
+        state: {
+          diagnosis: result,
+          imageDataUrl: capturedImage,
+        },
       });
-
-      navigate(`/farmer/diagnosis/${res.data._id}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'जाँच में त्रुटि हुई। कृपया दोबारा कोशिश करें।');
+      const message = err instanceof Error
+        ? err.message
+        : 'जाँच में त्रुटि हुई। कृपया दोबारा कोशिश करें।';
+      setError(message);
+      addToast({ type: 'error', title: 'जाँच विफल / Analysis Failed', message });
     } finally {
       setIsAnalyzing(false);
     }
-  }, [imageFile, navigate]);
+  }, [imageFile, capturedImage, navigate, addToast]);
 
   // Preview mode after capture
   if (capturedImage) {
@@ -98,6 +105,15 @@ export function ScanPage() {
           </div>
         )}
 
+        {/* Analyzing overlay */}
+        {isAnalyzing && (
+          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-10">
+            <LoadingSpinner size="lg" />
+            <p className="text-white text-lg font-bold mt-4">AI जाँच हो रही है...</p>
+            <p className="text-white/70 text-sm mt-1">Analyzing your crop image...</p>
+          </div>
+        )}
+
         {/* Action buttons */}
         <div className="bg-black/90 px-6 py-6 flex items-center justify-center gap-6">
           <button
@@ -108,7 +124,7 @@ export function ScanPage() {
             <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center">
               <RotateCcw className="w-7 h-7" />
             </div>
-            <span className="text-sm font-bold">🔄 दोबारा</span>
+            <span className="text-sm font-bold">दोबारा</span>
             <span className="text-xs opacity-70">Retake</span>
           </button>
 
@@ -124,7 +140,7 @@ export function ScanPage() {
                 <CheckCircle className="w-9 h-9" />
               )}
             </div>
-            <span className="text-sm font-bold">✅ जाँच करें</span>
+            <span className="text-sm font-bold">जाँच करें</span>
             <span className="text-xs opacity-70">Analyze</span>
           </button>
         </div>
@@ -174,7 +190,7 @@ export function ScanPage() {
           <div className="absolute bottom-24 left-4 right-4 z-20 bg-black/80 rounded-2xl p-4 flex items-start gap-3">
             <Lightbulb className="w-6 h-6 text-accent-400 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-white text-base font-bold">💡 पत्ती की करीबी फोटो लें</p>
+              <p className="text-white text-base font-bold">पत्ती की करीबी फोटो लें</p>
               <p className="text-white/70 text-sm mt-1">
                 Take a close-up photo of the affected leaf in good lighting
               </p>
