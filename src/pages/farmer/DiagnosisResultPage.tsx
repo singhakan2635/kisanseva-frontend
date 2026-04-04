@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -22,6 +22,14 @@ export function DiagnosisResultPage() {
   const isHindi = i18n.language?.startsWith('hi');
 
   const [expandedSection, setExpandedSection] = useState<string | null>('chemical');
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  // Stop speech when leaving the page
+  useEffect(() => {
+    return () => {
+      speechSynthesis.cancel();
+    };
+  }, []);
 
   // No diagnosis data -- prompt user to scan
   if (!state?.diagnosis) {
@@ -67,10 +75,57 @@ export function DiagnosisResultPage() {
   };
 
   const handleListen = () => {
-    const utterance = new SpeechSynthesisUtterance(
-      `${primaryDiagnosis.nameHi}. ${sevLabel}. ${diagnosis.visibleSymptoms.join(', ')}`
-    );
+    // If already speaking, stop
+    if (isSpeaking) {
+      speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+
+    // Build text in the selected language
+    const diseaseName = isHindi
+      ? (primaryDiagnosis.nameHi || primaryDiagnosis.name)
+      : primaryDiagnosis.name;
+
+    const parts = isHindi
+      ? [
+          `बीमारी: ${diseaseName}`,
+          `गंभीरता: ${sevLabel}`,
+          `सटीकता: ${primaryDiagnosis.confidence} प्रतिशत`,
+          diagnosis.visibleSymptoms.length > 0
+            ? `लक्षण: ${diagnosis.visibleSymptoms.join(', ')}`
+            : '',
+          diagnosis.treatments.chemical.length > 0
+            ? `दवाई: ${diagnosis.treatments.chemical.map(c => c.name).join(', ')}`
+            : '',
+        ]
+      : [
+          `Disease: ${diseaseName}`,
+          `Severity: ${sevLabel}`,
+          `Confidence: ${primaryDiagnosis.confidence} percent`,
+          diagnosis.visibleSymptoms.length > 0
+            ? `Symptoms: ${diagnosis.visibleSymptoms.join(', ')}`
+            : '',
+          diagnosis.treatments.chemical.length > 0
+            ? `Treatment: ${diagnosis.treatments.chemical.map(c => `${c.name}, ${c.dosage}`).join('. ')}`
+            : '',
+        ];
+
+    const text = parts.filter(Boolean).join('. ');
+    const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = isHindi ? 'hi-IN' : 'en-IN';
+    utterance.rate = 0.9;
+
+    // Try to find a good voice for the language
+    const voices = speechSynthesis.getVoices();
+    const langCode = isHindi ? 'hi' : 'en';
+    const preferredVoice = voices.find(v => v.lang.startsWith(langCode) && v.localService);
+    if (preferredVoice) utterance.voice = preferredVoice;
+
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    setIsSpeaking(true);
     speechSynthesis.speak(utterance);
   };
 
@@ -136,10 +191,23 @@ export function DiagnosisResultPage() {
       {/* Listen button */}
       <button
         onClick={handleListen}
-        className="w-full bg-accent-100 hover:bg-accent-200 border border-accent-300 text-earth-800 font-bold py-4 rounded-xl text-lg flex items-center justify-center gap-3 transition-colors"
+        className={`w-full border font-bold py-4 rounded-xl text-lg flex items-center justify-center gap-3 transition-colors ${
+          isSpeaking
+            ? 'bg-red-50 hover:bg-red-100 border-red-300 text-red-700'
+            : 'bg-accent-100 hover:bg-accent-200 border-accent-300 text-earth-800'
+        }`}
       >
-        <Volume2 className="w-6 h-6 text-accent-700" />
-        {t('farmer.diagnosis.listen')}
+        {isSpeaking ? (
+          <>
+            <Volume2 className="w-6 h-6 text-red-600 animate-pulse" />
+            {isHindi ? 'रुकें / Stop' : 'Stop'}
+          </>
+        ) : (
+          <>
+            <Volume2 className="w-6 h-6 text-accent-700" />
+            {t('farmer.diagnosis.listen')}
+          </>
+        )}
       </button>
 
       {/* Visible symptoms */}
