@@ -1,13 +1,16 @@
-import { createContext, useState, useCallback, useEffect, type ReactNode } from 'react';
-import type { User } from '@/types';
+import { createContext, useState, useCallback, useEffect, useRef, type ReactNode } from 'react';
+import { signInWithPhoneNumber, RecaptchaVerifier, type ConfirmationResult } from 'firebase/auth';
+import { firebaseAuth } from '@/config/firebase';
+import type { User, ApiResponse } from '@/types';
 import { apiClient, setToken, removeToken, getToken } from '@/services/api';
-import type { ApiResponse } from '@/types';
 
 interface AuthContextValue {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginWithPhone: (phone: string) => Promise<ConfirmationResult>;
+  verifyOtp: (confirmationResult: ConfirmationResult, code: string, role?: string) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
   logout: () => void;
 }
@@ -27,6 +30,7 @@ export const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
 
   // Restore session on mount
   useEffect(() => {
@@ -54,6 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     bootstrap();
   }, []);
 
+  // Email/password login (fallback for admin)
   const login = useCallback(async (email: string, password: string) => {
     const res = await apiClient<ApiResponse<{ token: string; user: User }>>('/auth/login', {
       method: 'POST',
@@ -64,6 +69,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(res.data.user);
   }, []);
 
+  // Firebase Phone OTP — Step 1: Send OTP
+  const loginWithPhone = useCallback(async (phone: string) => {
+    // Clean up any previous reCAPTCHA
+    if (recaptchaVerifierRef.current) {
+      recaptchaVerifierRef.current.clear();
+      recaptchaVerifierRef.current = null;
+    }
+    const container = document.getElementById('recaptcha-container');
+    if (container) container.innerHTML = '';
+
+    const verifier = new RecaptchaVerifier(firebaseAuth, 'recaptcha-container', { size: 'invisible' });
+    recaptchaVerifierRef.current = verifier;
+    return signInWithPhoneNumber(firebaseAuth, phone, verifier);
+  }, []);
+
+  // Firebase Phone OTP — Step 2: Verify OTP & authenticate with backend
+  const verifyOtp = useCallback(async (
+    confirmationResult: ConfirmationResult,
+    code: string,
+    role: string = 'farmer'
+  ) => {
+    const result = await confirmationResult.confirm(code);
+    const firebaseToken = await result.user.getIdToken();
+    const phone = result.user.phoneNumber || '';
+
+    // Authenticate with our backend (creates user if new, logs in if existing)
+    const res = await apiClient<ApiResponse<{ token: string; user: User }>>('/auth/firebase', {
+      method: 'POST',
+      body: JSON.stringify({ firebaseToken, phone, role }),
+    });
+
+    if (!res.success) throw new Error(res.message || 'Authentication failed');
+    setToken(res.data.token);
+    setUser(res.data.user);
+  }, []);
+
+  // Email/password register (fallback)
   const register = useCallback(async (data: RegisterData) => {
     const res = await apiClient<ApiResponse<{ token: string; user: User }>>('/auth/register', {
       method: 'POST',
@@ -77,15 +119,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     removeToken();
     setUser(null);
+    firebaseAuth.signOut().catch(() => {});
     window.location.href = '/login';
   }, []);
 
   return (
     <AuthContext.Provider value={{
       user, isAuthenticated: !!user, isLoading,
-      login, register, logout,
+      login, loginWithPhone, verifyOtp, register, logout,
     }}>
       {children}
+      {/* Invisible reCAPTCHA container */}
+      <div id="recaptcha-container" />
     </AuthContext.Provider>
   );
 }

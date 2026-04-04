@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { type ConfirmationResult } from 'firebase/auth';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { friendlyError } from '@/utils/firebaseErrors';
@@ -7,7 +8,7 @@ import { friendlyError } from '@/utils/firebaseErrors';
 const OTP_LENGTH = 6;
 
 export function LoginPage() {
-  const { login } = useAuth();
+  const { loginWithPhone, verifyOtp } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
@@ -17,6 +18,7 @@ export function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [resendTimer, setResendTimer] = useState(0);
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
 
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -37,8 +39,8 @@ export function LoginPage() {
     setPhoneError('');
     setIsLoading(true);
     try {
-      // TODO: call backend /auth/send-otp with +91<phone>
-      await new Promise((r) => setTimeout(r, 800));
+      const result = await loginWithPhone(`+91${cleaned}`);
+      setConfirmationResult(result);
       setOtpSent(true);
       setResendTimer(30);
       addToast({ type: 'success', title: 'OTP भेजा गया / OTP sent' });
@@ -91,12 +93,16 @@ export function LoginPage() {
     [otp], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  /* ─── Verify OTP ─── */
+  /* ─── Verify OTP via Firebase ─── */
   const handleVerifyOtp = async (code: string) => {
+    if (!confirmationResult) {
+      addToast({ type: 'error', title: 'Session expired. Please resend OTP.' });
+      setOtpSent(false);
+      return;
+    }
     setIsLoading(true);
     try {
-      // Login with phone + OTP
-      await login(`${phone}@kisanseva.phone`, code);
+      await verifyOtp(confirmationResult, code, 'farmer');
       addToast({ type: 'success', title: 'स्वागत है! / Welcome back!' });
       navigate('/farmer');
     } catch (err) {
@@ -200,7 +206,9 @@ export function LoginPage() {
                       setOtp(Array(OTP_LENGTH).fill(''));
                       setIsLoading(true);
                       try {
-                        await new Promise((r) => setTimeout(r, 800));
+                        const cleaned = phone.replace(/\D/g, '');
+                        const result = await loginWithPhone(`+91${cleaned}`);
+                        setConfirmationResult(result);
                         setResendTimer(30);
                         addToast({ type: 'success', title: 'OTP दोबारा भेजा / OTP resent' });
                         otpRefs.current[0]?.focus();

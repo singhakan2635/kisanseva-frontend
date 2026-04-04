@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { type ConfirmationResult } from 'firebase/auth';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { friendlyError } from '@/utils/firebaseErrors';
@@ -35,7 +36,7 @@ const LABELS: Record<string, { step2Title: string; sendOtp: string; enterOtp: st
 const OTP_LENGTH = 6;
 
 export function RegisterPage() {
-  const { register } = useAuth();
+  const { loginWithPhone, verifyOtp } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
@@ -48,6 +49,7 @@ export function RegisterPage() {
   const [name, setName] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [resendTimer, setResendTimer] = useState(0);
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
 
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -65,7 +67,7 @@ export function RegisterPage() {
     setStep(2);
   };
 
-  /* ─── Step 2: Send OTP ─── */
+  /* ─── Step 2: Send OTP via Firebase ─── */
   const handleSendOtp = async (e: FormEvent) => {
     e.preventDefault();
     const cleaned = phone.replace(/\D/g, '');
@@ -76,9 +78,8 @@ export function RegisterPage() {
     setPhoneError('');
     setIsLoading(true);
     try {
-      // TODO: call backend /auth/send-otp with +91<phone>
-      // For now, simulate OTP send
-      await new Promise((r) => setTimeout(r, 800));
+      const result = await loginWithPhone(`+91${cleaned}`);
+      setConfirmationResult(result);
       setOtpSent(true);
       setResendTimer(30);
       addToast({ type: 'success', title: 'OTP भेजा गया / OTP sent' });
@@ -132,20 +133,16 @@ export function RegisterPage() {
     [otp], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  /* ─── Step 2 → 3: Verify OTP & create account ─── */
+  /* ─── Step 2 → 3: Verify OTP via Firebase & authenticate with backend ─── */
   const handleVerifyOtp = async (code: string) => {
+    if (!confirmationResult) {
+      addToast({ type: 'error', title: 'Session expired. Please resend OTP.' });
+      setOtpSent(false);
+      return;
+    }
     setIsLoading(true);
     try {
-      // Register with phone number (backend creates account on OTP verify)
-      await register({
-        firstName: '',
-        lastName: '',
-        email: `${phone}@kisanseva.phone`,
-        phone: `+91${phone.replace(/\D/g, '')}`,
-        password: code, // OTP as initial password placeholder
-        role: 'farmer',
-      });
-      // Save language preference
+      await verifyOtp(confirmationResult, code, 'farmer');
       localStorage.setItem('kisanseva_lang', language);
       setStep(3);
     } catch (err) {
@@ -312,7 +309,9 @@ export function RegisterPage() {
                           setOtp(Array(OTP_LENGTH).fill(''));
                           setIsLoading(true);
                           try {
-                            await new Promise((r) => setTimeout(r, 800));
+                            const cleaned = phone.replace(/\D/g, '');
+                            const result = await loginWithPhone(`+91${cleaned}`);
+                            setConfirmationResult(result);
                             setResendTimer(30);
                             addToast({ type: 'success', title: 'OTP दोबारा भेजा / OTP resent' });
                             otpRefs.current[0]?.focus();
