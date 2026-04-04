@@ -14,15 +14,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 focus:ring-primary-500 disabled:from-primary-300 disabled:to-primary-300 disabled:text-white/70 shadow-md shadow-primary-400/20',
+    'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 disabled:bg-primary-300 disabled:text-white/70 shadow-sm',
   secondary:
-    'bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 focus:ring-secondary-500 disabled:from-secondary-300 disabled:to-secondary-300 disabled:text-white/70 shadow-md shadow-secondary-400/20',
+    'bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500 disabled:bg-secondary-300 disabled:text-white/70 shadow-sm',
   outline:
-    'bg-transparent text-primary-600 hover:bg-primary-50 focus:ring-primary-400 disabled:text-gray-400 border-2 border-primary-400 hover:border-primary-500',
+    'bg-transparent text-primary-700 hover:bg-primary-50 focus:ring-primary-400 disabled:text-earth-400 border-2 border-primary-300 hover:border-primary-400',
   danger:
-    'bg-gradient-to-r from-severity-severe to-severity-critical text-white hover:from-red-700 hover:to-red-800 focus:ring-red-500 disabled:from-red-300 disabled:to-red-300 shadow-md shadow-red-400/20',
+    'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 disabled:bg-red-300 shadow-sm',
   accent:
-    'bg-gradient-to-r from-accent-500 to-accent-600 text-white hover:from-accent-600 hover:to-accent-700 focus:ring-accent-500 disabled:from-accent-300 disabled:to-accent-300 shadow-md shadow-accent-400/20',
+    'bg-accent-600 text-white hover:bg-accent-700 focus:ring-accent-500 disabled:bg-accent-300 shadow-sm',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

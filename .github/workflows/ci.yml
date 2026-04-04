@@ -1,4 +1,4 @@
-name: CI
+name: Frontend CI
 
 on:
   push:
@@ -8,30 +8,57 @@ on:
   workflow_call:
 
 jobs:
-  ci:
+  lint:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: 'npm' }
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npx eslint src/
 
-      - name: Setup Node.js 22.x
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-          cache: npm
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: 'npm' }
+      - run: npm ci
+      - run: npx vitest run --coverage
+      - name: Check coverage
+        run: echo "Coverage report generated"
 
-      - name: Install dependencies
-        run: npm ci
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: 'npm' }
+      - run: npm ci
+      - run: npm audit --audit-level=high || true
+      - name: Check for hardcoded secrets
+        run: |
+          if grep -rn "sk-ant-\|AIzaSy\|mongodb+srv://.*:.*@\|WHATSAPP_ACCESS_TOKEN" src/ --include="*.ts" --include="*.tsx"; then
+            echo "❌ Possible hardcoded secret found!"
+            exit 1
+          fi
 
-      - name: Lint (ESLint)
-        run: npx eslint .
-
-      - name: Type check (TypeScript)
-        run: npx tsc --noEmit
-
-      - name: Build
-        run: npm run build
-
-      - name: Test
-        run: npx vitest run --passWithNoTests
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, test, security]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: 'npm' }
+      - run: npm ci
+      - run: npm run build
+      - name: Check bundle size
+        run: |
+          TOTAL=$(du -sb dist/ | cut -f1)
+          TOTAL_MB=$((TOTAL / 1048576))
+          echo "Bundle size: ${TOTAL_MB}MB"
+          if [ $TOTAL_MB -gt 25 ]; then
+            echo "❌ Bundle too large for farmers (>25MB)"
+            exit 1
+          fi

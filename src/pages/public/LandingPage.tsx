@@ -50,7 +50,7 @@ export function LandingPage() {
   return (
     <div className="min-h-screen flex flex-col overflow-hidden">
       {/* Hero banner with vibrant gradient */}
-      <div className="relative bg-gradient-to-br from-primary-500 via-secondary-500 to-accent-500">
+      <div className="relative bg-gradient-to-br from-primary-700 via-primary-600 to-secondary-600">
         {/* Decorative circles */}
         <div className="absolute top-[-60px] right-[-40px] w-48 h-48 bg-white/10 rounded-full blur-2xl" />
         <div className="absolute bottom-[-30px] left-[-20px] w-32 h-32 bg-accent-400/20 rounded-full blur-xl" />
@@ -101,7 +101,7 @@ export function LandingPage() {
         <div className="max-w-md mx-auto text-center -mt-2">
           <button
             onClick={() => navigate('/register')}
-            className="w-full max-w-xs min-h-[56px] bg-gradient-to-r from-primary-500 to-accent-500 hover:from-primary-600 hover:to-accent-600 text-white text-lg font-bold rounded-2xl shadow-lg shadow-primary-400/30 transition-all duration-300 active:scale-[0.97] hover:-translate-y-0.5"
+            className="w-full max-w-xs min-h-[56px] bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white text-lg font-bold rounded-2xl shadow-lg shadow-primary-600/30 transition-all duration-300 active:scale-[0.97] hover:-translate-y-0.5"
           >
             {s.getStarted}
           </button>

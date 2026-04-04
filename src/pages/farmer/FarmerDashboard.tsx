@@ -88,7 +88,7 @@ export function FarmerDashboard() {
   return (
     <div className="space-y-6 pb-24">
       {/* Greeting card with warm gradient */}
-      <div className="bg-gradient-to-br from-primary-500 via-primary-400 to-accent-400 rounded-2xl p-5 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br from-primary-700 via-primary-600 to-secondary-500 rounded-2xl p-5 text-white relative overflow-hidden">
         <div className="absolute top-[-20px] right-[-20px] w-28 h-28 bg-white/10 rounded-full blur-xl" />
         <div className="relative z-10">
           <p className="text-white/80 text-sm">{t('farmer.dashboard.greeting')},</p>
@@ -120,7 +120,7 @@ export function FarmerDashboard() {
           <div className="absolute inset-[-8px] rounded-full border-[3px] border-primary-400 animate-[pulse-ring_1.5s_ease-out_infinite] opacity-60" />
           <button
             onClick={() => navigate('/farmer/scan')}
-            className="relative w-[76px] h-[76px] rounded-full bg-gradient-to-br from-primary-500 to-primary-700 hover:from-primary-600 hover:to-primary-800 active:scale-95 shadow-xl shadow-primary-500/40 flex items-center justify-center transition-all duration-200 z-10"
+            className="relative w-[76px] h-[76px] rounded-full bg-gradient-to-br from-primary-600 to-primary-800 hover:from-primary-700 hover:to-primary-900 active:scale-95 shadow-xl shadow-primary-600/30 flex items-center justify-center transition-all duration-200 z-10"
             aria-label={t('farmer.dashboard.scanCropSub')}
           >
             <Camera className="w-9 h-9 text-white" />
