@@ -1,20 +1,19 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Camera, LogOut, Trash2, Plus, X, Bell, Globe, User, Phone, Save, Wheat,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useLanguage } from '@/hooks/useLanguage';
 import { apiClient } from '@/services/api';
 import type { ApiResponse } from '@/types';
 import { useToast } from '@/hooks/useToast';
+import type { SupportedLanguage } from '@/hooks/useLanguage';
 
-const languages = [
-  { code: 'hi', label: 'हिन्दी', labelEn: 'Hindi' },
+const languages: { code: SupportedLanguage; label: string; labelEn: string }[] = [
   { code: 'en', label: 'English', labelEn: 'English' },
-  { code: 'pa', label: 'ਪੰਜਾਬੀ', labelEn: 'Punjabi' },
-  { code: 'mr', label: 'मराठी', labelEn: 'Marathi' },
-  { code: 'te', label: 'తెలుగు', labelEn: 'Telugu' },
-  { code: 'ta', label: 'தமிழ்', labelEn: 'Tamil' },
+  { code: 'hi', label: 'हिन्दी', labelEn: 'Hindi' },
 ];
 
 const commonCrops = [
@@ -24,7 +23,9 @@ const commonCrops = [
 ];
 
 export function FarmerProfilePage() {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
+  const { currentLanguage, setLanguage } = useLanguage();
   const navigate = useNavigate();
   const toast = useToast();
   const photoInputRef = useRef<HTMLInputElement>(null);
@@ -32,7 +33,7 @@ export function FarmerProfilePage() {
   const [firstName, setFirstName] = useState(user?.firstName || '');
   const [lastName, setLastName] = useState(user?.lastName || '');
   const [phone, setPhone] = useState(user?.phone || '');
-  const [selectedLanguage, setSelectedLanguage] = useState('hi');
+  const [selectedLanguage, setSelectedLanguage] = useState<SupportedLanguage>(currentLanguage);
   const [myCrops, setMyCrops] = useState<string[]>([]);
   const [showCropPicker, setShowCropPicker] = useState(false);
   const [notifications, setNotifications] = useState(true);
@@ -60,6 +61,11 @@ export function FarmerProfilePage() {
     setMyCrops(myCrops.filter((c) => c !== crop));
   };
 
+  const handleLanguageSelect = (code: SupportedLanguage) => {
+    setSelectedLanguage(code);
+    setLanguage(code);
+  };
+
   const handleSave = async () => {
     setIsSaving(true);
     try {
@@ -74,9 +80,9 @@ export function FarmerProfilePage() {
           notificationsEnabled: notifications,
         }),
       });
-      toast.addToast({ type: 'success', title: 'प्रोफ़ाइल सहेजा गया / Profile saved' });
+      toast.addToast({ type: 'success', title: t('farmer.profile.profileSaved') });
     } catch {
-      toast.addToast({ type: 'error', title: 'सहेजने में त्रुटि / Failed to save' });
+      toast.addToast({ type: 'error', title: t('farmer.profile.saveFailed') });
     } finally {
       setIsSaving(false);
     }
@@ -88,20 +94,19 @@ export function FarmerProfilePage() {
   };
 
   const handleDeleteData = () => {
-    if (window.confirm('क्या आप वाकई अपना सारा डेटा हटाना चाहते हैं? / Are you sure you want to delete all your data?')) {
+    if (window.confirm(t('farmer.profile.deleteConfirm'))) {
       apiClient<ApiResponse<unknown>>('/users/me', { method: 'DELETE' })
         .then(() => {
           logout();
           navigate('/login');
         })
-        .catch(() => toast.addToast({ type: 'error', title: 'डेटा हटाने में त्रुटि' }));
+        .catch(() => toast.addToast({ type: 'error', title: t('farmer.profile.deleteFailed') }));
     }
   };
 
   return (
     <div className="space-y-6 pb-24">
-      <h1 className="text-xl font-bold text-earth-900">प्रोफ़ाइल</h1>
-      <p className="text-base text-earth-500 -mt-4">Profile</p>
+      <h1 className="text-xl font-bold text-earth-900">{t('farmer.profile.title')}</h1>
 
       {/* Profile photo */}
       <div className="flex justify-center">
@@ -135,7 +140,7 @@ export function FarmerProfilePage() {
         <div>
           <label className="block text-base font-bold text-earth-800 mb-1.5">
             <User className="w-4 h-4 inline mr-1.5" />
-            पहला नाम / First Name
+            {t('farmer.profile.firstName')}
           </label>
           <input
             type="text"
@@ -146,7 +151,7 @@ export function FarmerProfilePage() {
         </div>
         <div>
           <label className="block text-base font-bold text-earth-800 mb-1.5">
-            अंतिम नाम / Last Name
+            {t('farmer.profile.lastName')}
           </label>
           <input
             type="text"
@@ -158,7 +163,7 @@ export function FarmerProfilePage() {
         <div>
           <label className="block text-base font-bold text-earth-800 mb-1.5">
             <Phone className="w-4 h-4 inline mr-1.5" />
-            फ़ोन / Phone
+            {t('farmer.profile.phone')}
           </label>
           <div className="flex">
             <span className="inline-flex items-center min-h-[56px] px-4 text-lg font-medium text-earth-700 bg-earth-100 border-2 border-r-0 border-earth-200 rounded-l-2xl">
@@ -180,13 +185,13 @@ export function FarmerProfilePage() {
       <div className="bg-white rounded-2xl border border-earth-200 p-4">
         <div className="flex items-center gap-2 mb-3">
           <Globe className="w-5 h-5 text-earth-600" />
-          <p className="text-base font-bold text-earth-800">भाषा / Language</p>
+          <p className="text-base font-bold text-earth-800">{t('farmer.profile.language')}</p>
         </div>
         <div className="grid grid-cols-2 gap-3">
           {languages.map((lang) => (
             <button
               key={lang.code}
-              onClick={() => setSelectedLanguage(lang.code)}
+              onClick={() => handleLanguageSelect(lang.code)}
               className={`min-h-[56px] rounded-xl border-2 text-lg font-bold transition-colors ${
                 selectedLanguage === lang.code
                   ? 'bg-primary-600 text-white border-primary-600'
@@ -204,7 +209,7 @@ export function FarmerProfilePage() {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Wheat className="w-5 h-5 text-earth-600" />
-            <p className="text-base font-bold text-earth-800">मेरी फसलें / My Crops</p>
+            <p className="text-base font-bold text-earth-800">{t('farmer.profile.myCrops')}</p>
           </div>
           <button
             onClick={() => setShowCropPicker(true)}
@@ -216,7 +221,7 @@ export function FarmerProfilePage() {
 
         {myCrops.length === 0 ? (
           <p className="text-base text-earth-400 text-center py-4">
-            कोई फसल नहीं जोड़ी / No crops added
+            {t('farmer.profile.noCrops')}
           </p>
         ) : (
           <div className="flex flex-wrap gap-2">
@@ -239,7 +244,7 @@ export function FarmerProfilePage() {
           <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
             <div className="bg-white rounded-t-3xl w-full max-h-[70vh] overflow-y-auto p-6 animate-slide-up">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-earth-900">फसल चुनें / Select Crop</h3>
+                <h3 className="text-lg font-bold text-earth-900">{t('farmer.profile.selectCrop')}</h3>
                 <button onClick={() => setShowCropPicker(false)}>
                   <X className="w-6 h-6 text-earth-500" />
                 </button>
@@ -271,8 +276,8 @@ export function FarmerProfilePage() {
           <div className="flex items-center gap-2">
             <Bell className="w-5 h-5 text-earth-600" />
             <div>
-              <p className="text-base font-bold text-earth-800">सूचनाएँ / Notifications</p>
-              <p className="text-sm text-earth-500">Get alerts for weather and market prices</p>
+              <p className="text-base font-bold text-earth-800">{t('farmer.profile.notifications')}</p>
+              <p className="text-sm text-earth-500">{t('farmer.profile.notificationsSub')}</p>
             </div>
           </div>
           <button
@@ -297,7 +302,7 @@ export function FarmerProfilePage() {
         className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-xl text-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
       >
         <Save className="w-5 h-5" />
-        {isSaving ? 'सहेज रहे हैं...' : 'सहेजें / Save'}
+        {isSaving ? t('farmer.profile.saving') : t('farmer.profile.save')}
       </button>
 
       {/* Logout */}
@@ -306,7 +311,7 @@ export function FarmerProfilePage() {
         className="w-full bg-white border-2 border-earth-300 text-earth-700 font-bold py-4 rounded-xl text-lg flex items-center justify-center gap-2 hover:bg-earth-50 transition-colors"
       >
         <LogOut className="w-5 h-5" />
-        लॉग आउट / Logout
+        {t('farmer.profile.logout')}
       </button>
 
       {/* Delete data */}
@@ -315,7 +320,7 @@ export function FarmerProfilePage() {
         className="w-full text-red-500 text-base font-medium py-3 flex items-center justify-center gap-2"
       >
         <Trash2 className="w-4 h-4" />
-        डेटा डिलीट करें / Delete My Data
+        {t('farmer.profile.deleteData')}
       </button>
     </div>
   );

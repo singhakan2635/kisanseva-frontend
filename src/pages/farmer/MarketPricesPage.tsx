@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, TrendingUp, TrendingDown, Minus, MapPin, RefreshCw } from 'lucide-react';
 import { apiClient } from '@/services/api';
 import type { ApiResponse } from '@/types';
@@ -19,6 +20,9 @@ interface MarketPrice {
 }
 
 export function MarketPricesPage() {
+  const { t, i18n } = useTranslation();
+  const isHindi = i18n.language?.startsWith('hi');
+
   const [prices, setPrices] = useState<MarketPrice[]>([]);
   const [filteredPrices, setFilteredPrices] = useState<MarketPrice[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,8 +85,7 @@ export function MarketPricesPage() {
     <div className="space-y-5 pb-24">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-bold text-earth-900">🌾 मंडी भाव</h1>
-        <p className="text-base text-earth-500">Mandi Prices</p>
+        <h1 className="text-xl font-bold text-earth-900">{t('farmer.market.title')}</h1>
       </div>
 
       {/* Search bar */}
@@ -92,7 +95,7 @@ export function MarketPricesPage() {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="फसल खोजें / Search commodity..."
+          placeholder={t('farmer.market.searchPlaceholder')}
           className="w-full pl-12 pr-4 py-4 text-base bg-white border-2 border-earth-200 rounded-2xl focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200"
         />
       </div>
@@ -108,7 +111,7 @@ export function MarketPricesPage() {
                 : 'bg-white border border-earth-200 text-earth-700'
             }`}
           >
-            सभी राज्य
+            {t('farmer.market.allStates')}
           </button>
           {states.map((state) => (
             <button
@@ -134,7 +137,7 @@ export function MarketPricesPage() {
           className="flex items-center gap-2 text-base text-primary-600 font-medium disabled:opacity-50"
         >
           <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-          ताज़ा करें
+          {t('farmer.market.refresh')}
         </button>
       </div>
 
@@ -148,8 +151,7 @@ export function MarketPricesPage() {
       {/* Price cards */}
       {!isLoading && filteredPrices.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-lg font-bold text-earth-700">कोई भाव नहीं मिला</p>
-          <p className="text-base text-earth-500 mt-1">No prices found</p>
+          <p className="text-lg font-bold text-earth-700">{t('farmer.market.noPrices')}</p>
         </div>
       )}
 
@@ -162,8 +164,12 @@ export function MarketPricesPage() {
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <p className="text-lg font-bold text-earth-900">{price.commodityHindi}</p>
-                  <p className="text-sm text-earth-500">{price.commodity}</p>
+                  <p className="text-lg font-bold text-earth-900">
+                    {isHindi ? price.commodityHindi : price.commodity}
+                  </p>
+                  <p className="text-sm text-earth-500">
+                    {isHindi ? price.commodity : price.commodityHindi}
+                  </p>
                   <div className="flex items-center gap-1.5 mt-1 text-sm text-earth-400">
                     <MapPin className="w-3.5 h-3.5" />
                     {price.market}, {price.state}
@@ -182,19 +188,19 @@ export function MarketPricesPage() {
               {/* Price row */}
               <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t border-earth-100">
                 <div className="text-center">
-                  <p className="text-xs text-earth-400 font-medium">न्यूनतम</p>
-                  <p className="text-base font-bold text-earth-800">₹{price.minPrice}</p>
+                  <p className="text-xs text-earth-400 font-medium">{t('farmer.market.min')}</p>
+                  <p className="text-base font-bold text-earth-800">{price.minPrice}</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-xs text-earth-400 font-medium">अधिकतम</p>
-                  <p className="text-base font-bold text-earth-800">₹{price.maxPrice}</p>
+                  <p className="text-xs text-earth-400 font-medium">{t('farmer.market.max')}</p>
+                  <p className="text-base font-bold text-earth-800">{price.maxPrice}</p>
                 </div>
                 <div className="text-center bg-primary-50 rounded-lg py-1">
-                  <p className="text-xs text-primary-600 font-medium">मॉडल</p>
-                  <p className="text-lg font-bold text-primary-700">₹{price.modalPrice}</p>
+                  <p className="text-xs text-primary-600 font-medium">{t('farmer.market.modal')}</p>
+                  <p className="text-lg font-bold text-primary-700">{price.modalPrice}</p>
                 </div>
               </div>
-              <p className="text-xs text-earth-400 text-right mt-1">प्रति {price.unit}</p>
+              <p className="text-xs text-earth-400 text-right mt-1">{t('farmer.market.per')} {price.unit}</p>
             </div>
           ))}
         </div>

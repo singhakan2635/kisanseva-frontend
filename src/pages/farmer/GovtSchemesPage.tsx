@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ExternalLink, Filter } from 'lucide-react';
 import { apiClient } from '@/services/api';
 import type { ApiResponse } from '@/types';
@@ -17,16 +18,12 @@ interface GovtScheme {
   department: string;
 }
 
-const categories = [
-  { key: '', labelHi: 'सभी', labelEn: 'All' },
-  { key: 'subsidy', labelHi: 'सब्सिडी', labelEn: 'Subsidy' },
-  { key: 'insurance', labelHi: 'बीमा', labelEn: 'Insurance' },
-  { key: 'loan', labelHi: 'ऋण', labelEn: 'Loan' },
-  { key: 'training', labelHi: 'प्रशिक्षण', labelEn: 'Training' },
-  { key: 'equipment', labelHi: 'उपकरण', labelEn: 'Equipment' },
-];
+const categoryKeys = ['', 'subsidy', 'insurance', 'loan', 'training', 'equipment'];
 
 export function GovtSchemesPage() {
+  const { t, i18n } = useTranslation();
+  const isHindi = i18n.language?.startsWith('hi');
+
   const [schemes, setSchemes] = useState<GovtScheme[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -40,32 +37,36 @@ export function GovtSchemesPage() {
       .finally(() => setIsLoading(false));
   }, [selectedCategory]);
 
+  const getCategoryLabel = (key: string) => {
+    if (!key) return t('farmer.schemes.all');
+    return t(`farmer.schemes.${key}`);
+  };
+
   return (
     <div className="space-y-5 pb-24">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-bold text-earth-900">📋 सरकारी योजनाएँ</h1>
-        <p className="text-base text-earth-500">Government Schemes</p>
+        <h1 className="text-xl font-bold text-earth-900">{t('farmer.schemes.title')}</h1>
       </div>
 
       {/* Category filter tabs */}
       <div>
         <div className="flex items-center gap-2 mb-3">
           <Filter className="w-5 h-5 text-earth-400" />
-          <p className="text-base font-bold text-earth-700">श्रेणी</p>
+          <p className="text-base font-bold text-earth-700">{t('farmer.schemes.category')}</p>
         </div>
         <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
-          {categories.map((cat) => (
+          {categoryKeys.map((key) => (
             <button
-              key={cat.key}
-              onClick={() => setSelectedCategory(cat.key)}
+              key={key}
+              onClick={() => setSelectedCategory(key)}
               className={`flex-shrink-0 px-4 py-2.5 rounded-full text-base font-bold transition-colors ${
-                selectedCategory === cat.key
+                selectedCategory === key
                   ? 'bg-earth-700 text-white'
                   : 'bg-white border border-earth-200 text-earth-700'
               }`}
             >
-              {cat.labelHi}
+              {getCategoryLabel(key)}
             </button>
           ))}
         </div>
@@ -81,8 +82,7 @@ export function GovtSchemesPage() {
       {/* Empty state */}
       {!isLoading && schemes.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-lg font-bold text-earth-700">कोई योजना नहीं मिली</p>
-          <p className="text-base text-earth-500 mt-1">No schemes found</p>
+          <p className="text-lg font-bold text-earth-700">{t('farmer.schemes.noSchemes')}</p>
         </div>
       )}
 
@@ -105,23 +105,29 @@ export function GovtSchemesPage() {
               <div className="p-4 space-y-3">
                 {/* Scheme name */}
                 <div>
-                  <h3 className="text-lg font-bold text-earth-900">{scheme.nameHindi}</h3>
-                  <p className="text-sm text-earth-500 mt-0.5">{scheme.name}</p>
+                  <h3 className="text-lg font-bold text-earth-900">
+                    {isHindi ? scheme.nameHindi : scheme.name}
+                  </h3>
+                  <p className="text-sm text-earth-500 mt-0.5">
+                    {isHindi ? scheme.name : scheme.nameHindi}
+                  </p>
                 </div>
 
                 {/* Description */}
                 <p className="text-base text-earth-700 leading-relaxed">
-                  {scheme.descriptionHindi}
+                  {isHindi ? scheme.descriptionHindi : scheme.description}
                 </p>
                 <p className="text-sm text-earth-500 leading-relaxed">
-                  {scheme.description}
+                  {isHindi ? scheme.description : scheme.descriptionHindi}
                 </p>
 
                 {/* Eligibility */}
-                {scheme.eligibilityHindi && (
+                {(scheme.eligibilityHindi || scheme.eligibility) && (
                   <div className="bg-accent-50 border border-accent-200 rounded-xl p-3">
-                    <p className="text-sm font-bold text-earth-800">पात्रता / Eligibility:</p>
-                    <p className="text-base text-earth-700 mt-1">{scheme.eligibilityHindi}</p>
+                    <p className="text-sm font-bold text-earth-800">{t('farmer.schemes.eligibility')}:</p>
+                    <p className="text-base text-earth-700 mt-1">
+                      {isHindi ? (scheme.eligibilityHindi || scheme.eligibility) : (scheme.eligibility || scheme.eligibilityHindi)}
+                    </p>
                   </div>
                 )}
 
@@ -133,7 +139,7 @@ export function GovtSchemesPage() {
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2 w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-xl text-lg transition-colors"
                   >
-                    आवेदन करें / Apply
+                    {t('farmer.schemes.apply')}
                     <ExternalLink className="w-5 h-5" />
                   </a>
                 )}
