@@ -12,13 +12,16 @@ i18n
       en: { translation: en },
       hi: { translation: hi },
     },
+    lng: localStorage.getItem('kisanseva_lang') || 'en',
     fallbackLng: 'en',
     interpolation: {
       escapeValue: true,
     },
     detection: {
       order: ['localStorage', 'navigator'],
+      lookupLocalStorage: 'kisanseva_lang',
       caches: ['localStorage'],
+      lookupQuerystring: 'lng',
     },
   });
 

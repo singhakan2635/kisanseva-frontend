@@ -14,15 +14,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-primary-700 text-white hover:bg-primary-800 focus:ring-primary-500 disabled:bg-primary-300 disabled:text-white/70 shadow-sm',
+    'bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 focus:ring-primary-500 disabled:from-primary-300 disabled:to-primary-300 disabled:text-white/70 shadow-md shadow-primary-400/20',
   secondary:
-    'bg-white text-primary-800 hover:bg-primary-50 focus:ring-primary-400 disabled:bg-gray-100 disabled:text-gray-400 border-2 border-primary-300',
+    'bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 focus:ring-secondary-500 disabled:from-secondary-300 disabled:to-secondary-300 disabled:text-white/70 shadow-md shadow-secondary-400/20',
   outline:
-    'bg-transparent text-primary-700 hover:bg-primary-50 focus:ring-primary-400 disabled:text-gray-400 border-2 border-primary-400',
+    'bg-transparent text-primary-600 hover:bg-primary-50 focus:ring-primary-400 disabled:text-gray-400 border-2 border-primary-400 hover:border-primary-500',
   danger:
-    'bg-severity-severe text-white hover:bg-severity-critical focus:ring-red-500 disabled:bg-red-300 shadow-sm',
+    'bg-gradient-to-r from-severity-severe to-severity-critical text-white hover:from-red-700 hover:to-red-800 focus:ring-red-500 disabled:from-red-300 disabled:to-red-300 shadow-md shadow-red-400/20',
   accent:
-    'bg-accent-600 text-white hover:bg-accent-700 focus:ring-accent-500 disabled:bg-accent-300 shadow-sm',
+    'bg-gradient-to-r from-accent-500 to-accent-600 text-white hover:from-accent-600 hover:to-accent-700 focus:ring-accent-500 disabled:from-accent-300 disabled:to-accent-300 shadow-md shadow-accent-400/20',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -44,7 +44,7 @@ export function Button({
   return (
     <button
       disabled={disabled || isLoading}
-      className={`inline-flex items-center justify-center gap-2.5 font-semibold rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed min-w-[48px] ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2.5 font-semibold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed min-w-[48px] hover:-translate-y-0.5 active:scale-[0.97] ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       {...rest}
     >
       {isLoading && <Loader2 className="w-5 h-5 animate-spin" />}

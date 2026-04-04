@@ -16,15 +16,15 @@ interface CardProps {
 
 const variantClasses: Record<CardVariant, string> = {
   default:
-    'bg-white shadow-md shadow-earth-200/50 border border-earth-100 hover:shadow-lg hover:bg-earth-50/30 transition-all duration-200',
+    'bg-white/80 backdrop-blur-sm shadow-lg shadow-earth-200/50 border border-earth-100 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300',
   flat:
-    'bg-white border border-earth-100',
+    'bg-white/80 backdrop-blur-sm border border-earth-100',
   elevated:
-    'bg-white shadow-lg shadow-earth-200/60 border border-earth-100 hover:shadow-xl transition-all duration-200',
+    'bg-white/80 backdrop-blur-sm shadow-xl shadow-earth-200/60 border border-earth-100 hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300',
   outlined:
-    'bg-white border-2 border-earth-200 hover:border-primary-300 transition-all duration-200',
+    'bg-white/80 backdrop-blur-sm border-2 border-earth-200 hover:border-primary-300 transition-all duration-300',
   status:
-    'bg-white shadow-md shadow-earth-200/50 border border-earth-100 hover:shadow-lg transition-all duration-200',
+    'bg-white/80 backdrop-blur-sm shadow-lg shadow-earth-200/50 border border-earth-100 hover:shadow-xl transition-all duration-300',
 };
 
 export function Card({
@@ -58,7 +58,7 @@ export function Card({
       <div className={noPadding ? '' : 'px-5 py-5 sm:px-6 sm:py-6'}>{children}</div>
 
       {footer && (
-        <div className="px-5 py-4 sm:px-6 bg-earth-50 border-t border-earth-100">{footer}</div>
+        <div className="px-5 py-4 sm:px-6 bg-earth-50/80 border-t border-earth-100">{footer}</div>
       )}
     </div>
   );

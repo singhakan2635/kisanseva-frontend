@@ -1,11 +1,13 @@
 import { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Camera, Image, RotateCcw, CheckCircle, X, Lightbulb } from 'lucide-react';
 import { analyzePlantImage, saveDiagnosis, createThumbnail } from '@/services/diagnosisService';
 import { useToast } from '@/hooks/useToast';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
 export function ScanPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { addToast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -69,13 +71,13 @@ export function ScanPage() {
     } catch (err) {
       const message = err instanceof Error
         ? err.message
-        : 'जाँच में त्रुटि हुई। कृपया दोबारा कोशिश करें।';
+        : t('farmer.scan.analysisError');
       setError(message);
-      addToast({ type: 'error', title: 'जाँच विफल / Analysis Failed', message });
+      addToast({ type: 'error', title: t('farmer.scan.analysisFailed'), message });
     } finally {
       setIsAnalyzing(false);
     }
-  }, [imageFile, capturedImage, navigate, addToast]);
+  }, [imageFile, capturedImage, navigate, addToast, t]);
 
   // Preview mode after capture
   if (capturedImage) {
@@ -109,8 +111,8 @@ export function ScanPage() {
         {isAnalyzing && (
           <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-10">
             <LoadingSpinner size="lg" />
-            <p className="text-white text-lg font-bold mt-4">AI जाँच हो रही है...</p>
-            <p className="text-white/70 text-sm mt-1">Analyzing your crop image...</p>
+            <p className="text-white text-lg font-bold mt-4">{t('farmer.scan.analyzing')}</p>
+            <p className="text-white/70 text-sm mt-1">{t('farmer.scan.analyzingSub')}</p>
           </div>
         )}
 
@@ -124,8 +126,7 @@ export function ScanPage() {
             <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center">
               <RotateCcw className="w-7 h-7" />
             </div>
-            <span className="text-sm font-bold">दोबारा</span>
-            <span className="text-xs opacity-70">Retake</span>
+            <span className="text-sm font-bold">{t('farmer.scan.retake')}</span>
           </button>
 
           <button
@@ -140,8 +141,7 @@ export function ScanPage() {
                 <CheckCircle className="w-9 h-9" />
               )}
             </div>
-            <span className="text-sm font-bold">जाँच करें</span>
-            <span className="text-xs opacity-70">Analyze</span>
+            <span className="text-sm font-bold">{t('farmer.scan.analyze')}</span>
           </button>
         </div>
       </div>
@@ -181,8 +181,8 @@ export function ScanPage() {
 
         {/* Guide text */}
         <div className="absolute top-8 left-0 right-0 text-center z-10">
-          <p className="text-white text-lg font-bold">पत्ती को यहाँ रखें</p>
-          <p className="text-white/70 text-sm mt-1">Place the leaf here</p>
+          <p className="text-white text-lg font-bold">{t('farmer.scan.placeLeaf')}</p>
+          <p className="text-white/70 text-sm mt-1">{t('farmer.scan.placeLeafSub')}</p>
         </div>
 
         {/* Tip overlay */}
@@ -190,9 +190,9 @@ export function ScanPage() {
           <div className="absolute bottom-24 left-4 right-4 z-20 bg-black/80 rounded-2xl p-4 flex items-start gap-3">
             <Lightbulb className="w-6 h-6 text-accent-400 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-white text-base font-bold">पत्ती की करीबी फोटो लें</p>
+              <p className="text-white text-base font-bold">{t('farmer.scan.tipTitle')}</p>
               <p className="text-white/70 text-sm mt-1">
-                Take a close-up photo of the affected leaf in good lighting
+                {t('farmer.scan.tipDesc')}
               </p>
             </div>
             <button
@@ -215,7 +215,7 @@ export function ScanPage() {
           <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center">
             <Image className="w-7 h-7" />
           </div>
-          <span className="text-xs font-medium">गैलरी</span>
+          <span className="text-xs font-medium">{t('farmer.scan.gallery')}</span>
         </button>
 
         {/* Capture button */}

@@ -93,7 +93,7 @@ export function BottomNav() {
   };
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 bg-white border-t-2 border-earth-100 lg:hidden safe-area-bottom">
+    <nav className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-earth-200 lg:hidden safe-area-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
       <div className="flex items-stretch justify-around">
         {items.map((item) => {
           const active = isActive(item.to, item.end);
@@ -102,18 +102,22 @@ export function BottomNav() {
               key={item.to}
               to={item.to}
               end={item.end}
-              className="flex flex-col items-center justify-center min-h-[64px] min-w-[48px] flex-1 py-1.5 transition-colors duration-150"
+              className="relative flex flex-col items-center justify-center min-h-[64px] min-w-[48px] flex-1 py-1.5 transition-colors duration-150"
               aria-current={active ? 'page' : undefined}
             >
+              {/* Active indicator line on top */}
+              {active && (
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-b-full bg-gradient-to-r from-primary-500 to-accent-500" />
+              )}
               <item.icon
-                className={`w-7 h-7 mb-0.5 ${
+                className={`w-7 h-7 mb-0.5 transition-colors duration-150 ${
                   active ? 'text-primary-500' : 'text-earth-400'
                 }`}
                 strokeWidth={active ? 2.5 : 1.8}
               />
               <span
                 className={`text-[11px] leading-tight font-medium ${
-                  active ? 'text-primary-700' : 'text-earth-500'
+                  active ? 'text-primary-600' : 'text-earth-500'
                 }`}
               >
                 {t(item.labelKey)}
@@ -149,14 +153,14 @@ export function Sidebar({ isOpen: _isOpen, onClose: _onClose }: SidebarProps) {
 
   const activeIndicator = (isActive: boolean) =>
     isActive ? (
-      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-sidebar-active rounded-r-full" />
+      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-sidebar-active to-accent-400 rounded-r-full" />
     ) : null;
 
   return (
     <aside className="hidden lg:flex lg:flex-col fixed inset-y-0 left-0 z-20 w-64 bg-gradient-to-b from-sidebar-bg to-sidebar-dark">
       {/* Logo section */}
       <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-bold text-base shadow-md">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-400 to-accent-500 flex items-center justify-center text-white font-bold text-base shadow-md">
           KS
         </div>
         <div className="flex flex-col">
@@ -181,7 +185,7 @@ export function Sidebar({ isOpen: _isOpen, onClose: _onClose }: SidebarProps) {
             {({ isActive }) => (
               <>
                 {activeIndicator(isActive)}
-                <item.icon className="w-6 h-6 flex-shrink-0" />
+                <item.icon className={`w-6 h-6 flex-shrink-0 ${isActive ? 'text-sidebar-active' : ''}`} />
                 <span>{t(item.labelKey)}</span>
               </>
             )}
@@ -192,7 +196,7 @@ export function Sidebar({ isOpen: _isOpen, onClose: _onClose }: SidebarProps) {
       {/* User info at bottom */}
       <div className="px-3 py-4 border-t border-white/10">
         <div className="flex items-center gap-3 px-3 py-2">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-semibold text-sm ring-2 ring-primary-300/30">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-400 to-accent-500 flex items-center justify-center text-white font-semibold text-sm ring-2 ring-primary-300/30">
             {user.firstName?.[0]}{user.lastName?.[0]}
           </div>
           <div className="flex-1 min-w-0">
