@@ -100,7 +100,7 @@ export function FarmerDashboard() {
       {/* Welcome */}
       <div className="text-center">
         <p className="text-base text-earth-600">
-          नमस्ते, <span className="font-bold text-earth-800">{user?.firstName || 'किसान'}</span>
+          नमस्ते, <span className="font-bold text-earth-800">{user?.firstName || user?.lastName || 'Farmer'}</span>
         </p>
       </div>
 

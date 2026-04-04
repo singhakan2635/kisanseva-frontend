@@ -4,6 +4,7 @@ import { type ConfirmationResult } from 'firebase/auth';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { friendlyError } from '@/utils/firebaseErrors';
+import { apiClient } from '@/services/api';
 
 /* ───── Language data ───── */
 const LANGUAGES = [
@@ -158,10 +159,12 @@ export function RegisterPage() {
   const handleFinish = async (goToCamera: boolean) => {
     if (name.trim()) {
       try {
-        // TODO: PATCH /auth/profile with name
-        await new Promise((r) => setTimeout(r, 300));
+        await apiClient('/auth/profile', {
+          method: 'PATCH',
+          body: JSON.stringify({ firstName: name.trim() }),
+        });
       } catch {
-        // non-blocking
+        // non-blocking — name save is optional
       }
     }
     navigate(goToCamera ? '/farmer?action=camera' : '/farmer');
