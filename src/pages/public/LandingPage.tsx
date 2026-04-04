@@ -96,12 +96,12 @@ export function LandingPage() {
       </div>
 
       {/* White content area */}
-      <div className="flex-1 bg-white px-4 -mt-1">
+      <div className="flex-1 bg-white px-4 -mt-1 overflow-visible">
         {/* CTA Button */}
-        <div className="max-w-md mx-auto text-center -mt-2">
+        <div className="max-w-md mx-auto text-center -mt-2 overflow-visible">
           <button
             onClick={() => navigate('/register')}
-            className="w-full max-w-xs min-h-[56px] bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white text-lg font-bold rounded-2xl shadow-lg shadow-primary-600/30 transition-all duration-300 active:scale-[0.97] hover:-translate-y-0.5"
+            className="w-full max-w-xs min-h-[56px] bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white text-lg font-bold rounded-2xl shadow-lg shadow-primary-600/30 transition-all duration-300 active:scale-[0.97]"
           >
             {s.getStarted}
           </button>
