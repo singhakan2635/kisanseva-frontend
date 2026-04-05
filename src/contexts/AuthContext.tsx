@@ -71,13 +71,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Firebase Phone OTP — Step 1: Send OTP
   const loginWithPhone = useCallback(async (phone: string) => {
-    // Clean up any previous reCAPTCHA
+    // Fully clean up any previous reCAPTCHA instance
     if (recaptchaVerifierRef.current) {
-      recaptchaVerifierRef.current.clear();
+      try { recaptchaVerifierRef.current.clear(); } catch { /* already cleared */ }
       recaptchaVerifierRef.current = null;
     }
-    const container = document.getElementById('recaptcha-container');
-    if (container) container.innerHTML = '';
+
+    // Remove and recreate the container to avoid "already rendered" error
+    const oldContainer = document.getElementById('recaptcha-container');
+    if (oldContainer) oldContainer.remove();
+    const newContainer = document.createElement('div');
+    newContainer.id = 'recaptcha-container';
+    document.body.appendChild(newContainer);
 
     const verifier = new RecaptchaVerifier(firebaseAuth, 'recaptcha-container', { size: 'invisible' });
     recaptchaVerifierRef.current = verifier;
