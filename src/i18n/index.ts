@@ -1,27 +1,22 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 import en from './locales/en.json';
 import hi from './locales/hi.json';
 
+// Read saved language — default to English
+const savedLang = localStorage.getItem('kisanseva_lang') || 'en';
+
 i18n
-  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
       en: { translation: en },
       hi: { translation: hi },
     },
-    lng: localStorage.getItem('kisanseva_lang') || 'en',
+    lng: savedLang,
     fallbackLng: 'en',
     interpolation: {
       escapeValue: true,
-    },
-    detection: {
-      order: ['localStorage', 'navigator'],
-      lookupLocalStorage: 'kisanseva_lang',
-      caches: ['localStorage'],
-      lookupQuerystring: 'lng',
     },
   });
 
