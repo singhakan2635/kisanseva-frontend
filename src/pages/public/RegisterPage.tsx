@@ -267,7 +267,7 @@ export function RegisterPage() {
                     onClick={() => setStep(1)}
                     className="w-full text-sm text-gray-500 hover:text-gray-700 py-2"
                   >
-                    &larr; भाषा बदलें / Change language
+                    ← Change language
                   </button>
                 </form>
               ) : (
@@ -416,10 +416,10 @@ export function RegisterPage() {
               Continue with Google
             </button>
           </div>
-          <p className="text-sm text-gray-500">
-            पहले से खाता है?{' '}
+          <p className="text-sm text-earth-500">
+            Already have an account?{' '}
             <Link to="/login" className="text-primary-700 font-semibold underline underline-offset-2">
-              लॉगिन करें
+              Login
             </Link>
           </p>
         </div>
