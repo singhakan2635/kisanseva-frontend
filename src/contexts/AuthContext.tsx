@@ -1,5 +1,5 @@
 import { createContext, useState, useCallback, useEffect, useRef, type ReactNode } from 'react';
-import { signInWithPhoneNumber, RecaptchaVerifier, type ConfirmationResult } from 'firebase/auth';
+import { signInWithPhoneNumber, signInWithPopup, GoogleAuthProvider, RecaptchaVerifier, type ConfirmationResult } from 'firebase/auth';
 import { firebaseAuth } from '@/config/firebase';
 import type { User, ApiResponse } from '@/types';
 import { apiClient, setToken, removeToken, getToken } from '@/services/api';
@@ -11,6 +11,7 @@ interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>;
   loginWithPhone: (phone: string) => Promise<ConfirmationResult>;
   verifyOtp: (confirmationResult: ConfirmationResult, code: string, role?: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
   logout: () => void;
 }
@@ -110,6 +111,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(res.data.user);
   }, []);
 
+  // Google Sign-In
+  const loginWithGoogle = useCallback(async () => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(firebaseAuth, provider);
+    const firebaseToken = await result.user.getIdToken();
+    const email = result.user.email || '';
+    const displayName = result.user.displayName || '';
+    const nameParts = displayName.split(' ');
+
+    const res = await apiClient<ApiResponse<{ token: string; user: User }>>('/auth/firebase', {
+      method: 'POST',
+      body: JSON.stringify({
+        firebaseToken,
+        phone: '',
+        role: 'farmer',
+        email,
+        firstName: nameParts[0] || '',
+        lastName: nameParts.slice(1).join(' ') || '',
+      }),
+    });
+
+    if (!res.success) throw new Error(res.message || 'Google login failed');
+    setToken(res.data.token);
+    setUser(res.data.user);
+  }, []);
+
   // Email/password register (fallback)
   const register = useCallback(async (data: RegisterData) => {
     const res = await apiClient<ApiResponse<{ token: string; user: User }>>('/auth/register', {
@@ -131,7 +158,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider value={{
       user, isAuthenticated: !!user, isLoading,
-      login, loginWithPhone, verifyOtp, register, logout,
+      login, loginWithPhone, verifyOtp, loginWithGoogle, register, logout,
     }}>
       {children}
       {/* Invisible reCAPTCHA container */}
