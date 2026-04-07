@@ -83,12 +83,12 @@ export function ScanPage() {
   if (capturedImage) {
     return (
       <div className="fixed inset-0 bg-black z-50 flex flex-col">
-        {/* Image preview */}
-        <div className="flex-1 relative">
+        {/* Image preview — constrained height */}
+        <div className="flex-1 relative flex items-center justify-center overflow-hidden">
           <img
             src={capturedImage}
             alt="Captured crop"
-            className="w-full h-full object-contain"
+            className="max-w-full max-h-[70vh] object-contain rounded-lg"
           />
 
           {/* Close button */}
