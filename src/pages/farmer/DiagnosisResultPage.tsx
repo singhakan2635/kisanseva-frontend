@@ -184,7 +184,7 @@ export function DiagnosisResultPage() {
       {/* ══════════════════════════════════════════════════════════════════════════
          1. Hero Photo with Overlay
          ══════════════════════════════════════════════════════════════════════════ */}
-      <div className="relative w-full aspect-[4/3] bg-earth-200 overflow-hidden">
+      <div className="relative w-full h-[220px] sm:h-[260px] bg-earth-200 overflow-hidden">
         {imageDataUrl ? (
           <img
             src={imageDataUrl}
