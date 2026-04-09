@@ -27,7 +27,7 @@ export function QRCodeGenerator({
 
     const url = canvas.toDataURL('image/png');
     const link = document.createElement('a');
-    link.download = `kisanseva-qr${label ? `-${label.replace(/\s+/g, '-').toLowerCase()}` : ''}.png`;
+    link.download = `fasalrakshak-qr${label ? `-${label.replace(/\s+/g, '-').toLowerCase()}` : ''}.png`;
     link.href = url;
     link.click();
   }, [label]);

@@ -40,7 +40,7 @@ interface SystemInfo {
 const MOCK_WHATSAPP: WhatsAppConfig = {
   phoneNumber: '+91 6692369526',
   phoneNumberId: '573920...4821',
-  webhookUrl: 'https://kisanseva-backend-d6034e449591.herokuapp.com/api/whatsapp/webhook',
+  webhookUrl: 'https://fasalrakshak-backend.herokuapp.com/api/whatsapp/webhook',
   tokenStatus: 'valid',
   tokenExpiresAt: '2026-05-15T00:00:00Z',
 };

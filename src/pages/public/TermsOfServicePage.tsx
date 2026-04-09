@@ -9,14 +9,14 @@ export function TermsOfServicePage() {
           <section>
             <h2 className="text-xl font-semibold text-primary-700 mb-3">1. Acceptance of Terms</h2>
             <p>
-              By accessing or using KisanSeva's web application, mobile app, or WhatsApp bot services,
+              By accessing or using FasalRakshak's web application, mobile app, or WhatsApp bot services,
               you agree to be bound by these Terms of Service. If you do not agree, please do not use our services.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-primary-700 mb-3">2. Description of Service</h2>
-            <p>KisanSeva provides:</p>
+            <p>FasalRakshak provides:</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li>AI-powered plant disease detection and diagnosis from uploaded images</li>
               <li>Treatment recommendations (mechanical, physical, chemical, biological)</li>
@@ -40,7 +40,7 @@ export function TermsOfServicePage() {
           <section>
             <h2 className="text-xl font-semibold text-primary-700 mb-3">4. AI Diagnosis Disclaimer</h2>
             <p className="font-semibold text-red-700 bg-red-50 p-4 rounded-lg">
-              IMPORTANT: KisanSeva's plant disease diagnosis is AI-assisted and provided for informational
+              IMPORTANT: FasalRakshak's plant disease diagnosis is AI-assisted and provided for informational
               purposes only. It is NOT a substitute for professional agricultural advice. Always consult a
               local agricultural expert, Krishi Vigyan Kendra (KVK), or certified agronomist before applying
               any treatment to your crops. We are not responsible for crop losses resulting from reliance
@@ -63,7 +63,7 @@ export function TermsOfServicePage() {
           <section>
             <h2 className="text-xl font-semibold text-primary-700 mb-3">6. Intellectual Property</h2>
             <p>
-              All content, designs, and AI models on KisanSeva are our intellectual property.
+              All content, designs, and AI models on FasalRakshak are our intellectual property.
               Disease and pesticide data is sourced from ICAR, CIB India, and other public sources.
               Government scheme information is sourced from official government portals.
             </p>
@@ -72,7 +72,7 @@ export function TermsOfServicePage() {
           <section>
             <h2 className="text-xl font-semibold text-primary-700 mb-3">7. Limitation of Liability</h2>
             <p>
-              KisanSeva is provided "as is" without warranties of any kind. We shall not be liable for
+              FasalRakshak is provided "as is" without warranties of any kind. We shall not be liable for
               any indirect, incidental, or consequential damages arising from your use of the service,
               including but not limited to crop losses, incorrect diagnoses, or service interruptions.
             </p>
@@ -82,7 +82,7 @@ export function TermsOfServicePage() {
             <h2 className="text-xl font-semibold text-primary-700 mb-3">8. Data Deletion</h2>
             <p>
               You may request deletion of your account and all associated data at any time by contacting
-              us at <a href="mailto:support@kisanseva.com" className="text-primary-600 underline">support@kisanseva.com</a> or
+              us at <a href="mailto:support@fasalrakshak.in" className="text-primary-600 underline">support@fasalrakshak.in</a> or
               by sending "DELETE" to our WhatsApp number. Account deletion is processed within 30 days.
             </p>
           </section>
@@ -99,7 +99,7 @@ export function TermsOfServicePage() {
             <h2 className="text-xl font-semibold text-primary-700 mb-3">10. Contact</h2>
             <p>
               For questions about these terms, contact us at:<br />
-              Email: <a href="mailto:support@kisanseva.com" className="text-primary-600 underline">support@kisanseva.com</a><br />
+              Email: <a href="mailto:support@fasalrakshak.in" className="text-primary-600 underline">support@fasalrakshak.in</a><br />
               WhatsApp: +91 98185 51588
             </p>
           </section>

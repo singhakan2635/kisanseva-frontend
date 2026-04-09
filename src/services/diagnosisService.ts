@@ -43,7 +43,7 @@ export interface DiagnosisResult {
 
 // ─── LocalStorage history ────────────────────────────────────────────────────
 
-const HISTORY_KEY = 'kisanseva_diagnosis_history';
+const HISTORY_KEY = 'fasalrakshak_diagnosis_history';
 const MAX_HISTORY = 50;
 
 export interface DiagnosisHistoryItem {

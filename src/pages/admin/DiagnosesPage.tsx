@@ -93,7 +93,7 @@ export function DiagnosesPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'kisanseva-diagnoses.csv';
+    a.download = 'fasalrakshak-diagnoses.csv';
     a.click();
     URL.revokeObjectURL(url);
   }, [filtered]);

@@ -87,7 +87,7 @@ export function UsersPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'kisanseva-users.csv';
+    a.download = 'fasalrakshak-users.csv';
     a.click();
     URL.revokeObjectURL(url);
   }, [filtered]);

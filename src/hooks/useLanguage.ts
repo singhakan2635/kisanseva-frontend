@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const LANG_KEY = 'kisanseva_lang';
+const LANG_KEY = 'fasalrakshak_lang';
 
 export type SupportedLanguage = 'en' | 'hi';
 

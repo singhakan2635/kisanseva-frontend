@@ -4,7 +4,7 @@ import en from './locales/en.json';
 import hi from './locales/hi.json';
 
 // Read saved language — default to English
-const savedLang = localStorage.getItem('kisanseva_lang') || 'en';
+const savedLang = localStorage.getItem('fasalrakshak_lang') || 'en';
 
 i18n
   .use(initReactI18next)

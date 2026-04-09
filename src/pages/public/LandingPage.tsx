@@ -5,9 +5,9 @@ type Lang = 'en' | 'hi';
 
 const t = {
   en: {
-    brand: 'KisanSeva',
-    tagline: 'Identify crop diseases, get instant treatment advice',
-    taglineSub: '\u0905\u092A\u0928\u0940 \u092B\u0938\u0932 \u0915\u0940 \u092C\u0940\u092E\u093E\u0930\u0940 \u092A\u0939\u091A\u093E\u0928\u0947\u0902, \u0907\u0932\u093E\u091C \u092A\u093E\u090F\u0902',
+    brand: 'FasalRakshak',
+    tagline: "Your Crop's Guardian \u2014 Identify diseases, get treatment instantly",
+    taglineSub: '\u0906\u092A\u0915\u0940 \u092B\u0938\u0932 \u0915\u093E \u0930\u0915\u094D\u0937\u0915 \u2014 \u092C\u0940\u092E\u093E\u0930\u0940 \u092A\u0939\u091A\u093E\u0928\u0947\u0902, \u0907\u0932\u093E\u091C \u092A\u093E\u090F\u0902',
     getStarted: 'Get Started',
     login: 'Already have an account?',
     loginLink: 'Login',
@@ -20,9 +20,9 @@ const t = {
     switchLang: '\u0939\u093F\u0928\u094D\u0926\u0940 \u092E\u0947\u0902 \u0926\u0947\u0916\u0947\u0902',
   },
   hi: {
-    brand: '\u0915\u093F\u0938\u093E\u0928\u0938\u0947\u0935\u093E',
-    tagline: '\u0905\u092A\u0928\u0940 \u092B\u0938\u0932 \u0915\u0940 \u092C\u0940\u092E\u093E\u0930\u0940 \u092A\u0939\u091A\u093E\u0928\u0947\u0902, \u0907\u0932\u093E\u091C \u092A\u093E\u090F\u0902',
-    taglineSub: 'Identify crop diseases, get instant treatment advice',
+    brand: '\u092B\u0938\u0932\u0930\u0915\u094D\u0937\u0915',
+    tagline: '\u0906\u092A\u0915\u0940 \u092B\u0938\u0932 \u0915\u093E \u0930\u0915\u094D\u0937\u0915 \u2014 \u092C\u0940\u092E\u093E\u0930\u0940 \u092A\u0939\u091A\u093E\u0928\u0947\u0902, \u0907\u0932\u093E\u091C \u092A\u093E\u090F\u0902',
+    taglineSub: "Your Crop's Guardian \u2014 Identify diseases, get treatment instantly",
     getStarted: '\u0936\u0941\u0930\u0942 \u0915\u0930\u0947\u0902 / Get Started',
     login: '\u092A\u0939\u0932\u0947 \u0938\u0947 \u0916\u093E\u0924\u093E \u0939\u0948?',
     loginLink: '\u0932\u0949\u0917\u093F\u0928 \u0915\u0930\u0947\u0902',
@@ -76,10 +76,10 @@ export function LandingPage() {
             {s.brand}
           </h1>
           {lang === 'en' && (
-            <p className="text-lg text-white/70 font-medium">{'\u0915\u093F\u0938\u093E\u0928\u0938\u0947\u0935\u093E'}</p>
+            <p className="text-lg text-white/70 font-medium">{'\u092B\u0938\u0932\u0930\u0915\u094D\u0937\u0915'}</p>
           )}
           {lang === 'hi' && (
-            <p className="text-lg text-white/70 font-medium">KisanSeva</p>
+            <p className="text-lg text-white/70 font-medium">FasalRakshak</p>
           )}
           <p className="text-base sm:text-lg text-white/90 mt-4 max-w-md mx-auto leading-relaxed">
             {s.tagline}
@@ -164,7 +164,7 @@ export function LandingPage() {
       {/* Footer */}
       <footer className="py-6 text-center border-t border-earth-200 bg-earth-100">
         <p className="text-xs text-earth-500">
-          &copy; {new Date().getFullYear()} KisanSeva &mdash; Empowering Indian Farmers
+          &copy; {new Date().getFullYear()} FasalRakshak &mdash; Your Crop's Guardian
         </p>
       </footer>
     </div>

@@ -6,7 +6,7 @@ export const API_BASE_URL =
   'http://localhost:3002/api';
 
 // ─── Access token ────────────────────────────────────────────────────────────
-const TOKEN_KEY = 'kisanseva_token';
+const TOKEN_KEY = 'fasalrakshak_token';
 
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);

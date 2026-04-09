@@ -64,11 +64,11 @@ export function Navbar() {
           className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-xl p-1 min-h-[48px]"
         >
           <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-xl bg-primary-600 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-sm">
-            KS
+            FR
           </div>
           <div className="flex flex-col lg:hidden">
             <span className="text-base sm:text-lg font-bold text-primary-700 leading-tight">
-              KisanSeva
+              FasalRakshak
             </span>
             <span className="text-[9px] sm:text-[10px] text-earth-500 font-medium leading-none -mt-0.5">
               {t('common.tagline')}

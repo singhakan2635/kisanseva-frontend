@@ -14,7 +14,7 @@ export function QRLandingPage() {
   // Save referral for tracking
   useEffect(() => {
     if (ref) {
-      localStorage.setItem('kisanseva_ref', ref);
+      localStorage.setItem('fasalrakshak_ref', ref);
       // TODO: POST /analytics/qr-scan { ref, timestamp, userAgent }
     }
   }, [ref]);
@@ -46,11 +46,11 @@ export function QRLandingPage() {
     <div className="min-h-screen bg-earth-50 flex flex-col items-center justify-center px-4 py-12">
       <div className="w-full max-w-md text-center">
         {/* Logo */}
-        <div className="text-6xl mb-4">🌾</div>
-        <h1 className="text-3xl font-bold text-primary-800 mb-1">किसानसेवा</h1>
-        <p className="text-base text-gray-600 mb-2">KisanSeva</p>
+        <div className="text-6xl mb-4">\uD83C\uDF3E</div>
+        <h1 className="text-3xl font-bold text-primary-800 mb-1">{'\u092B\u0938\u0932\u0930\u0915\u094D\u0937\u0915'}</h1>
+        <p className="text-base text-gray-600 mb-2">FasalRakshak</p>
         <p className="text-sm text-gray-500 mb-8">
-          अपनी फसल की बीमारी पहचानें, इलाज पाएं
+          {'\u0906\u092A\u0915\u0940 \u092B\u0938\u0932 \u0915\u093E \u0930\u0915\u094D\u0937\u0915 \u2014 \u092C\u0940\u092E\u093E\u0930\u0940 \u092A\u0939\u091A\u093E\u0928\u0947\u0902, \u0907\u0932\u093E\u091C \u092A\u093E\u090F\u0902'}
         </p>
 
         {/* Actions */}
@@ -60,7 +60,7 @@ export function QRLandingPage() {
             onClick={handleGetStarted}
             className="w-full min-h-[56px] bg-primary-700 hover:bg-primary-800 text-white text-lg font-semibold rounded-2xl shadow-lg shadow-primary-500/25 transition-all duration-200 flex items-center justify-center gap-2"
           >
-            {isMobile ? '📱 ऐप में शुरू करें / Open App' : '🌐 शुरू करें / Get Started'}
+            {isMobile ? '\uD83D\uDCF1 \u0910\u092A \u092E\u0947\u0902 \u0936\u0941\u0930\u0942 \u0915\u0930\u0947\u0902 / Open App' : '\uD83C\uDF10 \u0936\u0941\u0930\u0942 \u0915\u0930\u0947\u0902 / Get Started'}
           </button>
 
           {/* WhatsApp CTA */}
@@ -71,7 +71,7 @@ export function QRLandingPage() {
             className="w-full min-h-[56px] bg-[#25D366] hover:bg-[#1DA851] text-white text-lg font-semibold rounded-2xl transition-all duration-200 flex items-center justify-center gap-2"
           >
             <WhatsAppIcon />
-            WhatsApp से शुरू करें
+            WhatsApp {'\u0938\u0947 \u0936\u0941\u0930\u0942 \u0915\u0930\u0947\u0902'}
           </a>
 
           {/* Already have account */}
@@ -79,14 +79,14 @@ export function QRLandingPage() {
             onClick={() => navigate('/login')}
             className="w-full text-sm text-gray-500 hover:text-gray-700 py-2 underline underline-offset-2"
           >
-            पहले से खाता है? लॉगिन करें
+            {'\u092A\u0939\u0932\u0947 \u0938\u0947 \u0916\u093E\u0924\u093E \u0939\u0948? \u0932\u0949\u0917\u093F\u0928 \u0915\u0930\u0947\u0902'}
           </button>
         </div>
 
         {/* Ref badge */}
         {ref && (
           <div className="mt-8 inline-flex items-center gap-1.5 bg-earth-100 text-earth-600 text-xs px-3 py-1.5 rounded-full">
-            📍 {ref}
+            \uD83D\uDCCD {ref}
           </div>
         )}
       </div>

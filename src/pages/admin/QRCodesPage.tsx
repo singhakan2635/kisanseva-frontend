@@ -4,7 +4,7 @@ import { MapPin, Plus, Printer, Trash2 } from 'lucide-react';
 
 const APP_BASE_URL =
   (typeof window !== 'undefined' && window.location.origin) ||
-  'https://kisanseva-frontend-e6be1e269532.herokuapp.com';
+  'https://fasalrakshak.in';
 
 interface QRLocation {
   id: string;
@@ -52,7 +52,7 @@ export function QRCodesPage() {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>KisanSeva QR - ${loc?.name || ''}</title>
+        <title>FasalRakshak QR - ${loc?.name || ''}</title>
         <style>
           @page { size: A4; margin: 20mm; }
           body { font-family: system-ui, sans-serif; text-align: center; padding: 40px 20px; }
@@ -69,8 +69,8 @@ export function QRCodesPage() {
       </head>
       <body>
         <div class="title">🌾</div>
-        <div class="subtitle">किसानसेवा — KisanSeva</div>
-        <div class="tagline">फसल की बीमारी पहचानें, इलाज पाएं</div>
+        <div class="subtitle">फसलरक्षक — FasalRakshak</div>
+        <div class="tagline">आपकी फसल का रक्षक — बीमारी पहचानें, इलाज पाएं</div>
         <div class="qr"><img src="${dataUrl}" alt="QR Code" /></div>
         <div class="instructions">
           <div class="step"><div class="step-num">1</div> <span>कैमरे से QR कोड स्कैन करें</span></div>

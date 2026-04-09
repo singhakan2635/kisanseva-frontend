@@ -170,9 +170,9 @@ export function DiagnosisResultPage() {
   const availableCards = TREATMENT_CARDS.filter(c => treatmentData[c.key]);
 
   const handleShare = () => {
-    const text = `KisanSeva - ${diseaseName}\n${sevLabel}\n${cropType}`;
+    const text = `FasalRakshak - ${diseaseName}\n${sevLabel}\n${cropType}`;
     if (navigator.share) {
-      navigator.share({ title: 'KisanSeva Diagnosis', text }).catch(() => {});
+      navigator.share({ title: 'FasalRakshak Diagnosis', text }).catch(() => {});
     } else {
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }

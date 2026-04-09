@@ -79,7 +79,7 @@ describe('diagnosisService - localStorage history', () => {
   });
 
   it('getHistory returns empty array on corrupted JSON', () => {
-    localStorage.setItem('kisanseva_diagnosis_history', 'not-valid-json');
+    localStorage.setItem('fasalrakshak_diagnosis_history', 'not-valid-json');
     expect(getHistory()).toEqual([]);
   });
 

@@ -161,11 +161,11 @@ export function Sidebar({ isOpen: _isOpen, onClose: _onClose }: SidebarProps) {
       {/* Logo section */}
       <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
         <div className="w-10 h-10 rounded-xl bg-primary-600 flex items-center justify-center text-white font-bold text-base shadow-sm">
-          KS
+          FR
         </div>
         <div className="flex flex-col">
           <span className="text-lg font-bold text-white tracking-tight leading-tight">
-            KisanSeva
+            FasalRakshak
           </span>
           <span className="text-[11px] text-sidebar-active font-medium leading-none">
             {t('common.tagline')}

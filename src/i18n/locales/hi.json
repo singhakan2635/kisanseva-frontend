@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "KisanSeva",
-    "tagline": "किसानों को तकनीक से सशक्त बनाना",
+    "appName": "FasalRakshak",
+    "tagline": "आपकी फसल का रक्षक",
     "close": "बंद करें",
     "cancel": "रद्द करें",
     "save": "सहेजें",
@@ -22,8 +22,8 @@
     "appointments": "परामर्श"
   },
   "landing": {
-    "heroTitle": "KisanSeva",
-    "heroSubtitle": "किसानों को तकनीक से सशक्त बनाना",
+    "heroTitle": "FasalRakshak",
+    "heroSubtitle": "आपकी फसल का रक्षक",
     "heroDescription": "कृषि विशेषज्ञों से जुड़ें, व्यक्तिगत फसल सलाह प्राप्त करें, मौसम पूर्वानुमान देखें, और अपने खेत का कुशलतापूर्वक प्रबंधन करें — सब एक ही मंच पर।",
     "getStarted": "शुरू करें",
     "learnMore": "और जानें",
@@ -39,9 +39,9 @@
   },
   "auth": {
     "loginTitle": "वापस स्वागत है",
-    "loginSubtitle": "अपने KisanSeva खाते में साइन इन करें",
+    "loginSubtitle": "अपने FasalRakshak खाते में साइन इन करें",
     "registerTitle": "खाता बनाएं",
-    "registerSubtitle": "कृषि विशेषज्ञों से जुड़ने के लिए KisanSeva में शामिल हों",
+    "registerSubtitle": "कृषि विशेषज्ञों से जुड़ने के लिए FasalRakshak में शामिल हों",
     "email": "ईमेल पता",
     "password": "पासवर्ड",
     "confirmPassword": "पासवर्ड की पुष्टि करें",
@@ -235,7 +235,7 @@
   "admin": {
     "dashboard": {
       "welcome": "एडमिन डैशबोर्ड",
-      "subtitle": "KisanSeva प्लेटफ़ॉर्म प्रबंधित करें",
+      "subtitle": "FasalRakshak प्लेटफ़ॉर्म प्रबंधित करें",
       "totalUsers": "कुल उपयोगकर्ता",
       "totalFarmers": "कुल किसान",
       "totalExperts": "कुल विशेषज्ञ",

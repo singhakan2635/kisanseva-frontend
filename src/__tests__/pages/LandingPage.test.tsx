@@ -13,23 +13,23 @@ describe('LandingPage', () => {
     navigateMock.mockClear();
   });
 
-  it('renders brand name KisanSeva', () => {
+  it('renders brand name FasalRakshak', () => {
     render(<LandingPage />);
-    expect(screen.getByText('KisanSeva')).toBeInTheDocument();
+    expect(screen.getByText('FasalRakshak')).toBeInTheDocument();
   });
 
   it('renders Hindi brand name as subtitle when English is active', () => {
     render(<LandingPage />);
-    // In English mode, the Hindi subtitle "kisanseva" is shown
-    expect(screen.getByText('किसानसेवा')).toBeInTheDocument();
+    // In English mode, the Hindi subtitle "\u092B\u0938\u0932\u0930\u0915\u094D\u0937\u0915" is shown
+    expect(screen.getByText('\u092B\u0938\u0932\u0930\u0915\u094D\u0937\u0915')).toBeInTheDocument();
   });
 
   it('language toggle switches to Hindi', () => {
     render(<LandingPage />);
-    const toggleBtn = screen.getByText(/हिन्दी में देखें/);
+    const toggleBtn = screen.getByText(/\u0939\u093F\u0928\u094D\u0926\u0940 \u092E\u0947\u0902 \u0926\u0947\u0916\u0947\u0902/);
     fireEvent.click(toggleBtn);
     // After switching, the brand becomes Hindi
-    expect(screen.getByText('किसानसेवा')).toBeInTheDocument();
+    expect(screen.getByText('\u092B\u0938\u0932\u0930\u0915\u094D\u0937\u0915')).toBeInTheDocument();
     // And the toggle now shows English option
     expect(screen.getByText(/View in English/)).toBeInTheDocument();
   });
@@ -37,10 +37,10 @@ describe('LandingPage', () => {
   it('language toggle switches back to English', () => {
     render(<LandingPage />);
     // Switch to Hindi first
-    fireEvent.click(screen.getByText(/हिन्दी में देखें/));
+    fireEvent.click(screen.getByText(/\u0939\u093F\u0928\u094D\u0926\u0940 \u092E\u0947\u0902 \u0926\u0947\u0916\u0947\u0902/));
     // Switch back to English
     fireEvent.click(screen.getByText(/View in English/));
-    expect(screen.getByText('KisanSeva')).toBeInTheDocument();
+    expect(screen.getByText('FasalRakshak')).toBeInTheDocument();
   });
 
   it('Get Started button navigates to /register', () => {
@@ -72,7 +72,7 @@ describe('LandingPage', () => {
 
   it('renders footer with copyright', () => {
     render(<LandingPage />);
-    expect(screen.getByText(/KisanSeva/)).toBeInTheDocument();
-    expect(screen.getByText(/Empowering Indian Farmers/)).toBeInTheDocument();
+    expect(screen.getByText(/FasalRakshak/)).toBeInTheDocument();
+    expect(screen.getByText(/Your Crop's Guardian/)).toBeInTheDocument();
   });
 });

@@ -9,7 +9,7 @@ export function PrivacyPolicyPage() {
           <section>
             <h2 className="text-xl font-semibold text-primary-700 mb-3">1. Introduction</h2>
             <p>
-              KisanSeva ("we", "our", "us") is an agriculture technology platform that helps farmers
+              FasalRakshak ("we", "our", "us") is an agriculture technology platform that helps farmers
               identify plant diseases, get treatment recommendations, and access government schemes.
               This Privacy Policy explains how we collect, use, and protect your information when you
               use our web application, mobile app, and WhatsApp bot services.
@@ -85,7 +85,7 @@ export function PrivacyPolicyPage() {
             <h2 className="text-xl font-semibold text-primary-700 mb-3">8. Contact Us</h2>
             <p>
               For any privacy-related queries, contact us at:<br />
-              Email: <a href="mailto:privacy@kisanseva.com" className="text-primary-600 underline">privacy@kisanseva.com</a><br />
+              Email: <a href="mailto:support@fasalrakshak.in" className="text-primary-600 underline">support@fasalrakshak.in</a><br />
               WhatsApp: +91 98185 51588
             </p>
           </section>

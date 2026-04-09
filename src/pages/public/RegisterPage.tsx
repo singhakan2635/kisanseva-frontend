@@ -144,7 +144,7 @@ export function RegisterPage() {
     setIsLoading(true);
     try {
       await verifyOtp(confirmationResult, code, 'farmer');
-      localStorage.setItem('kisanseva_lang', language);
+      localStorage.setItem('fasalrakshak_lang', language);
       setStep(3);
     } catch (err) {
       addToast({ type: 'error', title: friendlyError(err) });

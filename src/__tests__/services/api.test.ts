@@ -16,7 +16,7 @@ describe('Token management', () => {
 
   it('setToken stores token in localStorage', () => {
     setToken('test-token-123');
-    expect(localStorage.getItem('kisanseva_token')).toBe('test-token-123');
+    expect(localStorage.getItem('fasalrakshak_token')).toBe('test-token-123');
   });
 
   it('getToken retrieves stored token', () => {

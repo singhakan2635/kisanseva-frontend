@@ -41,7 +41,7 @@ describe('useLanguage', () => {
     });
 
     expect(changeLanguageMock).toHaveBeenCalledWith('hi');
-    expect(localStorage.getItem('kisanseva_lang')).toBe('hi');
+    expect(localStorage.getItem('fasalrakshak_lang')).toBe('hi');
   });
 
   it('setLanguage changes to en and persists to localStorage', () => {
@@ -53,7 +53,7 @@ describe('useLanguage', () => {
     });
 
     expect(changeLanguageMock).toHaveBeenCalledWith('en');
-    expect(localStorage.getItem('kisanseva_lang')).toBe('en');
+    expect(localStorage.getItem('fasalrakshak_lang')).toBe('en');
   });
 
   it('toggleLanguage switches from en to hi', () => {
@@ -64,7 +64,7 @@ describe('useLanguage', () => {
     });
 
     expect(changeLanguageMock).toHaveBeenCalledWith('hi');
-    expect(localStorage.getItem('kisanseva_lang')).toBe('hi');
+    expect(localStorage.getItem('fasalrakshak_lang')).toBe('hi');
   });
 
   it('toggleLanguage switches from hi to en', () => {
@@ -76,7 +76,7 @@ describe('useLanguage', () => {
     });
 
     expect(changeLanguageMock).toHaveBeenCalledWith('en');
-    expect(localStorage.getItem('kisanseva_lang')).toBe('en');
+    expect(localStorage.getItem('fasalrakshak_lang')).toBe('en');
   });
 
   it('isHindi is true when language is hi', () => {

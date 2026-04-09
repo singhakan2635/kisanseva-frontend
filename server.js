@@ -28,9 +28,9 @@ app.use((_req, res, next) => {
       "script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://apis.google.com https://www.recaptcha.net",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      "frame-src 'self' https://www.google.com https://www.recaptcha.net https://kisanseva-app.firebaseapp.com https://*.firebaseapp.com",
+      "frame-src 'self' https://www.google.com https://www.recaptcha.net https://fasalrakshak-app.firebaseapp.com https://*.firebaseapp.com",
       "img-src 'self' data: blob: https://www.gstatic.com",
-      `connect-src 'self' ${process.env.VITE_API_BASE_URL || process.env.API_BASE_URL || ''} https://kisanseva-backend-d6034e449591.herokuapp.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebase.googleapis.com https://firebaseinstallations.googleapis.com https://www.google.com https://www.recaptcha.net`,
+      `connect-src 'self' ${process.env.VITE_API_BASE_URL || process.env.API_BASE_URL || ''} https://fasalrakshak-backend.herokuapp.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://firebase.googleapis.com https://firebaseinstallations.googleapis.com https://www.google.com https://www.recaptcha.net`,
       "object-src 'none'",
       "base-uri 'self'",
     ].join('; ')
@@ -74,5 +74,5 @@ app.get('/{*splat}', (_req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`KisanSeva frontend server running on port ${PORT}`);
+  console.log(`FasalRakshak frontend server running on port ${PORT}`);
 });

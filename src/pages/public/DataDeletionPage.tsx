@@ -9,7 +9,7 @@ export function DataDeletionPage() {
           <section>
             <h2 className="text-xl font-semibold text-primary-700 mb-3">How to Delete Your Data</h2>
             <p>
-              KisanSeva respects your right to control your personal data. You can request deletion
+              FasalRakshak respects your right to control your personal data. You can request deletion
               of your account and all associated data through any of the following methods:
             </p>
           </section>
@@ -28,7 +28,7 @@ export function DataDeletionPage() {
             <div className="bg-primary-50 p-4 rounded-lg">
               <p>Send an email to:</p>
               <p className="text-lg font-semibold mt-2">
-                <a href="mailto:support@kisanseva.com" className="text-primary-600 underline">support@kisanseva.com</a>
+                <a href="mailto:support@fasalrakshak.in" className="text-primary-600 underline">support@fasalrakshak.in</a>
               </p>
               <p className="text-sm text-gray-500 mt-1">Include your registered phone number or email in the request.</p>
             </div>
@@ -37,7 +37,7 @@ export function DataDeletionPage() {
           <section>
             <h2 className="text-xl font-semibold text-primary-700 mb-3">Method 3: Via App</h2>
             <div className="bg-primary-50 p-4 rounded-lg">
-              <p>Log in to your KisanSeva account → Profile → Settings → Delete Account</p>
+              <p>Log in to your FasalRakshak account → Profile → Settings → Delete Account</p>
             </div>
           </section>
 

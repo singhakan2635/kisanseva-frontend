@@ -1,7 +1,7 @@
 {
   "common": {
-    "appName": "KisanSeva",
-    "tagline": "Empowering Farmers with Technology",
+    "appName": "FasalRakshak",
+    "tagline": "Your Crop's Guardian",
     "close": "Close",
     "cancel": "Cancel",
     "save": "Save",
@@ -22,8 +22,8 @@
     "appointments": "Consultations"
   },
   "landing": {
-    "heroTitle": "KisanSeva",
-    "heroSubtitle": "Empowering Farmers with Technology",
+    "heroTitle": "FasalRakshak",
+    "heroSubtitle": "Your Crop's Guardian",
     "heroDescription": "Connect with agricultural experts, get personalized crop advice, access weather forecasts, and manage your farm efficiently — all in one platform.",
     "getStarted": "Get Started",
     "learnMore": "Learn More",
@@ -39,9 +39,9 @@
   },
   "auth": {
     "loginTitle": "Welcome Back",
-    "loginSubtitle": "Sign in to your KisanSeva account",
+    "loginSubtitle": "Sign in to your FasalRakshak account",
     "registerTitle": "Create Account",
-    "registerSubtitle": "Join KisanSeva to connect with agricultural experts",
+    "registerSubtitle": "Join FasalRakshak to connect with agricultural experts",
     "email": "Email Address",
     "password": "Password",
     "confirmPassword": "Confirm Password",
@@ -235,7 +235,7 @@
   "admin": {
     "dashboard": {
       "welcome": "Admin Dashboard",
-      "subtitle": "Manage the KisanSeva platform",
+      "subtitle": "Manage the FasalRakshak platform",
       "totalUsers": "Total Users",
       "totalFarmers": "Total Farmers",
       "totalExperts": "Total Experts",
