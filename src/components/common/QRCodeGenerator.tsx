@@ -1,6 +1,7 @@
 import { useRef, useCallback } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { Download } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface QRCodeGeneratorProps {
   value: string;
@@ -19,6 +20,7 @@ export function QRCodeGenerator({
   label,
   showDownload = true,
 }: QRCodeGeneratorProps) {
+  const { t } = useTranslation();
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = useCallback(() => {
@@ -58,7 +60,7 @@ export function QRCodeGenerator({
           className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2 bg-white border-2 border-earth-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-earth-50 hover:border-primary-400 transition-all duration-200"
         >
           <Download className="w-4 h-4" />
-          PNG डाउनलोड करें / Download PNG
+          {t('qr.downloadPng')}
         </button>
       )}
     </div>

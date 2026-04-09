@@ -91,7 +91,7 @@ export function QRCodesPage() {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">
-          QR Codes — वितरण / Distribution
+          QR Codes — Distribution
         </h1>
         <p className="text-sm text-gray-500 mt-1">
           Generate QR codes for different locations to track farmer signups
@@ -194,7 +194,7 @@ export function QRCodesPage() {
                 className="mt-4 w-full min-h-[48px] bg-white border-2 border-primary-400 text-primary-700 rounded-xl font-medium text-sm hover:bg-primary-50 transition-all duration-200 flex items-center justify-center gap-2"
               >
                 <Printer className="w-4 h-4" />
-                प्रिंट पोस्टर / Print Poster
+                Print Poster
               </button>
             </div>
           ) : (

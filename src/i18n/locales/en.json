@@ -11,7 +11,11 @@
     "noResults": "No results found",
     "back": "Back",
     "submit": "Submit",
-    "search": "Search"
+    "search": "Search",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "or": "or",
+    "changeLanguage": "Change Language"
   },
   "nav": {
     "home": "Home",
@@ -64,7 +68,41 @@
     "lastNameRequired": "Last name is required",
     "phoneRequired": "Phone number is required",
     "passwordMismatch": "Passwords do not match",
-    "passwordMinLength": "Password must be at least 6 characters"
+    "passwordMinLength": "Password must be at least 6 characters",
+    "chooseLanguage": "Choose Language",
+    "chooseLanguageSub": "Choose Language",
+    "enterPhoneSub": "Enter your phone number",
+    "sendOtp": "Send OTP",
+    "otpSent": "OTP sent",
+    "otpResent": "OTP resent",
+    "resendOtp": "Resend OTP",
+    "changeNumber": "Change number",
+    "changeLanguage": "Change language",
+    "verifying": "Verifying...",
+    "resendOtpIn": "Resend OTP in",
+    "loginWithPhoneOtp": "Login with Phone OTP",
+    "loginWithGoogle": "Login with Google",
+    "continueWithGoogle": "Continue with Google",
+    "backToLoginOptions": "Back to login options",
+    "sendOtpButton": "Send OTP",
+    "enterOtp": "Enter OTP",
+    "enterOtpSentTo": "Enter OTP sent to +91",
+    "resendOtpInSeconds": "Resend OTP in {{seconds}}s",
+    "loginHeading": "Login",
+    "newHere": "New here?",
+    "createAccount": "Create account",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Login",
+    "validPhoneError": "Please enter a valid 10-digit number",
+    "sessionExpired": "Session expired. Please resend OTP.",
+    "welcomeBack": "Welcome back!",
+    "welcome": "Welcome!",
+    "accountCreated": "Your account is ready",
+    "takePhotoNow": "Take photo now",
+    "later": "Later",
+    "namePrompt": "Your name (optional)",
+    "skip": "Skip",
+    "namePlaceholder": "e.g. Ravi Kumar"
   },
   "sidebar": {
     "dashboard": "Dashboard",
@@ -97,6 +135,7 @@
       "weatherLoading": "Loading weather...",
       "scanCrop": "Send a photo of your plant",
       "scanCropSub": "Scan Your Crop",
+      "heroText": "Identify diseases, get treatments, and protect your harvest",
       "mandiPrices": "Mandi Prices",
       "commonDiseases": "Common Diseases",
       "weather": "Weather",
@@ -104,7 +143,11 @@
       "recentDiagnoses": "Recent Diagnoses",
       "viewAll": "View All",
       "noDiagnoses": "No diagnoses yet",
-      "firstScan": "Take First Scan"
+      "firstScan": "Take First Scan",
+      "tipLabel": "Tip",
+      "tip1": "Rotate crops every season to prevent soil disease",
+      "tip2": "Water your crops early morning to reduce evaporation",
+      "tip3": "Use neem-based solutions for organic pest control"
     },
     "scan": {
       "placeLeaf": "Place the leaf here",
@@ -119,7 +162,9 @@
       "analyzing": "AI is analyzing...",
       "analyzingSub": "Analyzing your crop image...",
       "analysisFailed": "Analysis Failed",
-      "analysisError": "Error during analysis. Please try again."
+      "analysisError": "Error during analysis. Please try again.",
+      "notPlantImage": "This doesn't look like a plant photo. Please take a clear photo of your crop.",
+      "rateLimitReached": "You've reached your daily limit (10 scans). Try again tomorrow."
     },
     "diagnosis": {
       "noResult": "No diagnosis found",
@@ -149,7 +194,11 @@
       "newPhoto": "New Photo",
       "findShop": "Find Agri Shop",
       "callExpert": "Call Expert",
+      "scanAnother": "Scan Another",
+      "share": "Share",
+      "severityLevel": "Severity Level",
       "severity": {
+        "healthy": "Healthy",
         "mild": "Mild",
         "moderate": "Moderate",
         "severe": "Severe",
@@ -162,6 +211,12 @@
         "deficiency": "Deficiency",
         "pest": "Pest",
         "unknown": "Unknown"
+      },
+      "healthy": {
+        "title": "Your crop looks healthy!",
+        "subtitle": "No disease detected",
+        "tips": "Keep Your Crops Healthy",
+        "defaultTip": "Keep monitoring your crops regularly"
       }
     },
     "history": {
@@ -220,7 +275,19 @@
       "deleteConfirm": "Are you sure you want to delete all your data?",
       "profileSaved": "Profile saved",
       "saveFailed": "Failed to save",
-      "deleteFailed": "Failed to delete data"
+      "deleteFailed": "Failed to delete data",
+      "crops": {
+        "rice": "Rice",
+        "wheat": "Wheat",
+        "maize": "Maize",
+        "cotton": "Cotton",
+        "soybean": "Soybean",
+        "sugarcane": "Sugarcane",
+        "potato": "Potato",
+        "tomato": "Tomato",
+        "onion": "Onion",
+        "chilli": "Chilli"
+      }
     }
   },
   "expert": {
@@ -241,6 +308,9 @@
       "totalExperts": "Total Experts",
       "activeConsultations": "Active Consultations"
     }
+  },
+  "qr": {
+    "downloadPng": "Download PNG"
   },
   "notFound": {
     "title": "Page Not Found",

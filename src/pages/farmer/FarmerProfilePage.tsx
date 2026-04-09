@@ -16,11 +16,11 @@ const languages: { code: SupportedLanguage; label: string; labelEn: string }[] =
   { code: 'hi', label: 'हिन्दी', labelEn: 'Hindi' },
 ];
 
-const commonCrops = [
-  'धान / Rice', 'गेहूँ / Wheat', 'मक्का / Maize', 'कपास / Cotton',
-  'सोयाबीन / Soybean', 'गन्ना / Sugarcane', 'आलू / Potato', 'टमाटर / Tomato',
-  'प्याज / Onion', 'मिर्च / Chilli',
-];
+const CROP_KEYS = [
+  'rice', 'wheat', 'maize', 'cotton',
+  'soybean', 'sugarcane', 'potato', 'tomato',
+  'onion', 'chilli',
+] as const;
 
 export function FarmerProfilePage() {
   const { t } = useTranslation();
@@ -225,13 +225,13 @@ export function FarmerProfilePage() {
           </p>
         ) : (
           <div className="flex flex-wrap gap-2">
-            {myCrops.map((crop) => (
+            {myCrops.map((cropKey) => (
               <span
-                key={crop}
+                key={cropKey}
                 className="inline-flex items-center gap-1.5 bg-primary-50 border border-primary-200 text-primary-800 px-3 py-2 rounded-full text-base font-medium"
               >
-                {crop}
-                <button onClick={() => removeCrop(crop)} className="hover:text-red-600">
+                {t(`farmer.profile.crops.${cropKey}`)}
+                <button onClick={() => removeCrop(cropKey)} className="hover:text-red-600">
                   <X className="w-4 h-4" />
                 </button>
               </span>
@@ -250,20 +250,23 @@ export function FarmerProfilePage() {
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                {commonCrops.map((crop) => (
-                  <button
-                    key={crop}
-                    onClick={() => addCrop(crop)}
-                    disabled={myCrops.includes(crop)}
-                    className={`min-h-[56px] rounded-xl border-2 text-base font-bold transition-colors ${
-                      myCrops.includes(crop)
-                        ? 'bg-earth-100 text-earth-400 border-earth-200'
-                        : 'bg-white text-earth-700 border-earth-200 hover:border-primary-400 hover:bg-primary-50'
-                    }`}
-                  >
-                    {crop}
-                  </button>
-                ))}
+                {CROP_KEYS.map((cropKey) => {
+                  const cropLabel = t(`farmer.profile.crops.${cropKey}`);
+                  return (
+                    <button
+                      key={cropKey}
+                      onClick={() => addCrop(cropKey)}
+                      disabled={myCrops.includes(cropKey)}
+                      className={`min-h-[56px] rounded-xl border-2 text-base font-bold transition-colors ${
+                        myCrops.includes(cropKey)
+                          ? 'bg-earth-100 text-earth-400 border-earth-200'
+                          : 'bg-white text-earth-700 border-earth-200 hover:border-primary-400 hover:bg-primary-50'
+                      }`}
+                    >
+                      {cropLabel}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
