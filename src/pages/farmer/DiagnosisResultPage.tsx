@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Camera, Share2,
   Wrench, FlaskConical, Leaf, AlertTriangle,
-  Shield, Bug, ChevronDown, ChevronUp,
+  Shield, Bug, ChevronDown, ChevronUp, CheckCircle,
 } from 'lucide-react';
 import type { DiagnosisResult } from '@/services/diagnosisService';
 
@@ -78,6 +78,118 @@ export function DiagnosisResultPage() {
   const diagnosis = state.diagnosis;
   const imageDataUrl = state.imageDataUrl;
   const { primaryDiagnosis } = diagnosis;
+
+  // ── Healthy plant result ────────────────────────────────────────────────────
+  if (diagnosis.isHealthy) {
+    const handleShareHealthy = () => {
+      const text = `FasalRakshak - ${t('farmer.diagnosis.healthy.title', 'Your crop looks healthy!')}`;
+      if (navigator.share) {
+        navigator.share({ title: 'FasalRakshak Diagnosis', text }).catch(() => {});
+      } else {
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+      }
+    };
+
+    return (
+      <div className="min-h-screen bg-earth-50 pb-24">
+        {/* Hero with image */}
+        <div className="relative w-full h-[35vh] max-h-[350px] min-h-[180px] bg-earth-200 overflow-hidden">
+          {imageDataUrl ? (
+            <img src={imageDataUrl} alt="Uploaded crop" className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <Camera className="w-16 h-16 text-earth-400" />
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+          <button
+            onClick={() => navigate(-1)}
+            className="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center z-10 min-w-[48px] min-h-[48px]"
+            aria-label={t('common.back', 'Back')}
+          >
+            <ArrowLeft className="w-5 h-5 text-white" />
+          </button>
+
+          <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold text-white bg-secondary-500 mb-2">
+              {t('farmer.diagnosis.severity.healthy', 'Healthy')}
+            </span>
+            <h1 className="text-2xl font-bold text-white leading-tight">
+              {t('farmer.diagnosis.healthy.title', 'Your crop looks healthy!')}
+            </h1>
+          </div>
+        </div>
+
+        {/* Green healthy banner */}
+        <div className="mx-4 -mt-4 relative z-20">
+          <div className="bg-white rounded-xl shadow-sm p-6 text-center">
+            <div className="w-16 h-16 mx-auto rounded-full bg-secondary-100 flex items-center justify-center mb-4">
+              <CheckCircle className="w-10 h-10 text-secondary-600" />
+            </div>
+            <h2 className="text-xl font-bold text-secondary-700 mb-1">
+              {t('farmer.diagnosis.healthy.title', 'Your crop looks healthy!')}
+            </h2>
+            <p className="text-sm text-earth-500">
+              {t('farmer.diagnosis.healthy.subtitle', 'No disease detected')}
+            </p>
+            {diagnosis.healthyMessage && (
+              <p className="text-sm text-earth-600 mt-3">
+                {diagnosis.healthyMessage}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Tips card */}
+        <div className="mx-4 mt-4">
+          <div className="bg-white rounded-xl shadow-sm p-4">
+            <h2 className="text-base font-bold text-earth-900 mb-3">
+              {t('farmer.diagnosis.healthy.tips', 'Keep Your Crops Healthy')}
+            </h2>
+            <ul className="space-y-2.5">
+              {(diagnosis.preventionTips.length > 0
+                ? diagnosis.preventionTips
+                : [t('farmer.diagnosis.healthy.defaultTip', 'Keep monitoring your crops regularly')]
+              ).map((tip, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <Shield className="w-4 h-4 text-secondary-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-earth-700 leading-snug">{tip}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Disclaimer */}
+        {diagnosis.disclaimer && (
+          <p className="mx-4 mt-4 text-[11px] text-earth-400 text-center leading-relaxed px-2">
+            {diagnosis.disclaimer}
+          </p>
+        )}
+
+        {/* Sticky bottom action bar */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-earth-200 z-40">
+          <div className="flex items-center gap-3 max-w-lg mx-auto px-4 py-3">
+            <button
+              onClick={() => navigate('/farmer/scan')}
+              className="flex-1 border-2 border-primary-600 text-primary-700 font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 transition-colors hover:bg-primary-50 min-h-[48px]"
+            >
+              <Camera className="w-5 h-5" />
+              {t('farmer.diagnosis.scanAnother', 'Scan Another')}
+            </button>
+            <button
+              onClick={handleShareHealthy}
+              className="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 transition-colors min-h-[48px]"
+            >
+              <Share2 className="w-5 h-5" />
+              {t('farmer.diagnosis.share', 'Share')}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const severity = primaryDiagnosis.severity as Severity;
   const sevConfig = SEVERITY_CONFIG[severity] || SEVERITY_CONFIG.mild;

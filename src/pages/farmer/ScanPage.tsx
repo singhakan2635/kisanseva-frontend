@@ -58,6 +58,17 @@ export function ScanPage() {
         createThumbnail(imageFile),
       ]);
 
+      // Handle non-plant image
+      if (result.isPlantImage === false) {
+        const msg = t(
+          'farmer.scan.notPlantImage',
+          "This doesn't look like a plant photo. Please take a clear photo of your crop."
+        );
+        setError(msg);
+        addToast({ type: 'error', title: t('farmer.scan.analysisFailed'), message: msg });
+        return;
+      }
+
       // Save to local history
       saveDiagnosis(result, thumbnail);
 
@@ -69,6 +80,19 @@ export function ScanPage() {
         },
       });
     } catch (err) {
+      // Handle rate limit (429) response
+      const isRateLimit =
+        err instanceof Error && err.message.includes('Daily scan limit');
+      if (isRateLimit) {
+        const msg = t(
+          'farmer.scan.rateLimitReached',
+          "You've reached your daily limit (10 scans). Try again tomorrow."
+        );
+        setError(msg);
+        addToast({ type: 'error', title: t('farmer.scan.analysisFailed'), message: msg });
+        return;
+      }
+
       const message = err instanceof Error
         ? err.message
         : t('farmer.scan.analysisError');

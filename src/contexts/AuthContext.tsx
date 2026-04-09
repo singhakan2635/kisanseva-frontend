@@ -72,18 +72,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Firebase Phone OTP — Step 1: Send OTP
   const loginWithPhone = useCallback(async (phone: string) => {
-    // Fully clean up any previous reCAPTCHA instance
+    // Clean up previous reCAPTCHA
     if (recaptchaVerifierRef.current) {
       try { recaptchaVerifierRef.current.clear(); } catch { /* already cleared */ }
       recaptchaVerifierRef.current = null;
     }
 
-    // Remove and recreate the container to avoid "already rendered" error
-    const oldContainer = document.getElementById('recaptcha-container');
-    if (oldContainer) oldContainer.remove();
-    const newContainer = document.createElement('div');
-    newContainer.id = 'recaptcha-container';
-    document.body.appendChild(newContainer);
+    // Ensure container exists (don't remove/recreate — causes React DOM conflicts)
+    let container = document.getElementById('recaptcha-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'recaptcha-container';
+      document.body.appendChild(container);
+    } else {
+      container.innerHTML = '';
+    }
+
+    // Small delay to let DOM settle after clear
+    await new Promise(r => setTimeout(r, 100));
 
     const verifier = new RecaptchaVerifier(firebaseAuth, 'recaptcha-container', { size: 'invisible' });
     recaptchaVerifierRef.current = verifier;
