@@ -120,7 +120,8 @@
     "database": "Database",
     "schemes": "Schemes",
     "scan": "Scan",
-    "history": "History"
+    "history": "History",
+    "home": "Home"
   },
   "farmer": {
     "dashboard": {
@@ -150,8 +151,8 @@
       "tip3": "Use neem-based solutions for organic pest control"
     },
     "scan": {
-      "placeLeaf": "Place the leaf here",
-      "placeLeafSub": "Place the leaf here",
+      "placeLeaf": "Point your camera at the leaf",
+      "placeLeafSub": "Hold phone 6 inches above the sick leaf",
       "tipTitle": "Take a close-up photo of the leaf",
       "tipDesc": "Take a close-up photo of the affected leaf in good lighting",
       "gallery": "Gallery",
@@ -193,10 +194,23 @@
       "preventionTips": "Prevention Tips",
       "newPhoto": "New Photo",
       "findShop": "Find Agri Shop",
+      "findShopNearMe": "Find shop near me",
       "callExpert": "Call Expert",
       "scanAnother": "Scan Another",
       "share": "Share",
+      "moreDetails": "More Details",
+      "hideDetails": "Hide Details",
+      "whatToDo": "What to do",
+      "askForAtShop": "Ask for this at the shop",
+      "howToApply": "Mix the powder in a bucket of water and spray on the leaves",
       "severityLevel": "Severity Level",
+      "simpleSeverity": {
+        "healthy": "Healthy / स्वस्थ",
+        "mild": "Low Risk / कम खतरा",
+        "moderate": "Medium Risk / मध्यम खतरा",
+        "severe": "High Risk / ज़्यादा खतरा",
+        "critical": "Very High Risk / बहुत ज़्यादा खतरा"
+      },
       "severity": {
         "healthy": "Healthy",
         "mild": "Mild",

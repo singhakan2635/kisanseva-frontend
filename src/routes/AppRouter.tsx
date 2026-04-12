@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useState, useRef } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ProtectedRoute } from '@/routes/ProtectedRoute';
 import { MainLayout } from '@/components/layout/MainLayout';
@@ -50,9 +50,32 @@ function ScrollToTop() {
   return null;
 }
 
+/** Thin progress bar at top of screen during route transitions */
+function NavigationProgress() {
+  const { pathname } = useLocation();
+  const [visible, setVisible] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    setVisible(true);
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setVisible(false), 400);
+    return () => clearTimeout(timeoutRef.current);
+  }, [pathname]);
+
+  if (!visible) return null;
+
+  return (
+    <div className="fixed top-0 left-0 right-0 z-[9999] h-[3px] overflow-hidden bg-primary-100/50">
+      <div className="h-full w-1/2 bg-primary-600 rounded-r-full animate-nav-progress" />
+    </div>
+  );
+}
+
 export function AppRouter() {
   return (
     <BrowserRouter>
+      <NavigationProgress />
       <ScrollToTop />
       <Suspense fallback={<PageLoader />}>
         <Routes>
