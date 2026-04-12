@@ -120,7 +120,8 @@
     "database": "Database",
     "schemes": "Schemes",
     "scan": "Scan",
-    "history": "History"
+    "history": "History",
+    "home": "Home"
   },
   "farmer": {
     "dashboard": {

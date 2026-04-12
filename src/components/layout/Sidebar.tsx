@@ -13,6 +13,7 @@ import {
   Microscope,
   Database,
   Landmark,
+  Home,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
@@ -26,14 +27,12 @@ interface NavItem {
   end?: boolean;
 }
 
-/* Mobile bottom nav: max 5 tabs for farmer, role-appropriate for others */
+/* Mobile bottom nav: 3 tabs for farmer (Home, Scan center, History), role-appropriate for others */
 const mobileNavByRole: Record<UserRole, NavItem[]> = {
   farmer: [
-    { labelKey: 'sidebar.dashboard', to: '/farmer', icon: LayoutDashboard, end: true },
+    { labelKey: 'sidebar.home', to: '/farmer', icon: Home, end: true },
     { labelKey: 'sidebar.scan', to: '/farmer/scan', icon: Camera },
     { labelKey: 'sidebar.history', to: '/farmer/history', icon: History },
-    { labelKey: 'sidebar.mandiPrices', to: '/farmer/mandi', icon: TrendingUp },
-    { labelKey: 'sidebar.myProfile', to: '/farmer/profile', icon: UserCircle },
   ],
   expert: [
     { labelKey: 'sidebar.dashboard', to: '/expert', icon: LayoutDashboard, end: true },
@@ -97,6 +96,25 @@ export function BottomNav() {
       <div className="flex items-stretch justify-around">
         {items.map((item) => {
           const active = isActive(item.to, item.end);
+          const isScan = item.to === '/farmer/scan';
+
+          if (isScan) {
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className="relative flex flex-col items-center justify-center min-h-[64px] min-w-[48px] flex-1 py-1.5"
+              >
+                <div className="w-14 h-14 -mt-5 rounded-full bg-primary-600 flex items-center justify-center shadow-lg shadow-primary-600/30">
+                  <Camera className="w-7 h-7 text-white" strokeWidth={2.2} />
+                </div>
+                <span className="text-[11px] leading-tight font-bold text-primary-700 mt-0.5">
+                  {t(item.labelKey)}
+                </span>
+              </NavLink>
+            );
+          }
+
           return (
             <NavLink
               key={item.to}
@@ -105,7 +123,6 @@ export function BottomNav() {
               className="relative flex flex-col items-center justify-center min-h-[64px] min-w-[48px] flex-1 py-1.5 transition-colors duration-150"
               aria-current={active ? 'page' : undefined}
             >
-              {/* Active indicator line on top */}
               {active && (
                 <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-b-full bg-primary-600" />
               )}

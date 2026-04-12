@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Camera, Image, RotateCcw, CheckCircle, X, Lightbulb } from 'lucide-react';
+import { Camera, Image, RotateCcw, CheckCircle, X, Lightbulb, ArrowLeft } from 'lucide-react';
 import { analyzePlantImage, saveDiagnosis, createThumbnail } from '@/services/diagnosisService';
 import { useToast } from '@/hooks/useToast';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
@@ -115,10 +115,19 @@ export function ScanPage() {
             className="max-w-full max-h-[70vh] object-contain rounded-lg"
           />
 
+          {/* Back button */}
+          <button
+            onClick={() => navigate('/farmer')}
+            className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-2 rounded-full bg-black/50 min-h-[48px] min-w-[48px] z-20"
+          >
+            <ArrowLeft className="w-5 h-5 text-white" />
+            <span className="text-white text-sm font-medium">{t('common.back')}</span>
+          </button>
+
           {/* Close button */}
           <button
-            onClick={() => navigate(-1)}
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 flex items-center justify-center"
+            onClick={() => navigate('/farmer')}
+            className="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 flex items-center justify-center z-20"
           >
             <X className="w-6 h-6 text-white" />
           </button>
@@ -195,10 +204,19 @@ export function ScanPage() {
           <line x1="150" y1="100" x2="210" y2="180" opacity="0.3" />
         </svg>
 
+        {/* Back button */}
+        <button
+          onClick={() => navigate('/farmer')}
+          className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-2 rounded-full bg-black/50 min-h-[48px] min-w-[48px] z-20"
+        >
+          <ArrowLeft className="w-5 h-5 text-white" />
+          <span className="text-white text-sm font-medium">{t('common.back')}</span>
+        </button>
+
         {/* Close button */}
         <button
-          onClick={() => navigate(-1)}
-          className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 flex items-center justify-center z-20"
+          onClick={() => navigate('/farmer')}
+          className="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 flex items-center justify-center z-20"
         >
           <X className="w-6 h-6 text-white" />
         </button>
