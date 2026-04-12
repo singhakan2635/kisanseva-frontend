@@ -76,11 +76,12 @@ export function LandingPage() {
             {s.brand}
           </h1>
           {lang === 'en' && (
-            <p className="text-lg text-white/70 font-medium">{'\u092B\u0938\u0932\u0930\u0915\u094D\u0937\u0915'}</p>
+            <p className="text-lg text-white/70 font-medium">फसलरक्षक</p>
           )}
           {lang === 'hi' && (
             <p className="text-lg text-white/70 font-medium">FasalRakshak</p>
           )}
+          <p className="text-sm text-white/50 mt-1 font-medium tracking-wide">by IndiaAI</p>
           <p className="text-base sm:text-lg text-white/90 mt-4 max-w-md mx-auto leading-relaxed">
             {s.tagline}
           </p>
@@ -164,7 +165,7 @@ export function LandingPage() {
       {/* Footer */}
       <footer className="py-6 text-center border-t border-earth-200 bg-earth-100">
         <p className="text-xs text-earth-500">
-          &copy; {new Date().getFullYear()} FasalRakshak &mdash; Your Crop's Guardian
+          &copy; {new Date().getFullYear()} FasalRakshak by IndiaAI &mdash; Your Crop's Guardian
         </p>
       </footer>
     </div>

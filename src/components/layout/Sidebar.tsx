@@ -167,6 +167,9 @@ export function Sidebar({ isOpen: _isOpen, onClose: _onClose }: SidebarProps) {
           <span className="text-lg font-bold text-white tracking-tight leading-tight">
             FasalRakshak
           </span>
+          <span className="text-[10px] text-sidebar-active/60 font-medium leading-none">
+            by IndiaAI
+          </span>
           <span className="text-[11px] text-sidebar-active font-medium leading-none">
             {t('common.tagline')}
           </span>
