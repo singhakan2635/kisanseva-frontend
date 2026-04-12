@@ -193,12 +193,7 @@ export function FarmerDashboard() {
         <div className="bg-white rounded-2xl border border-earth-200 p-6 text-center shadow-sm">
           <Bug className="w-10 h-10 text-earth-300 mx-auto mb-3" />
           <p className="text-base font-bold text-earth-800">{t('farmer.dashboard.noDiagnoses')}</p>
-          <button
-            onClick={() => navigate('/farmer/scan')}
-            className="mt-4 bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-xl text-base transition-colors duration-200 shadow-sm"
-          >
-            {t('farmer.dashboard.firstScan')}
-          </button>
+          <p className="text-sm text-earth-500 mt-2">{t('farmer.dashboard.noDiagnosesHint')}</p>
         </div>
       )}
 

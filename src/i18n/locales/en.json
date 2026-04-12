@@ -144,6 +144,7 @@
       "recentDiagnoses": "Recent Diagnoses",
       "viewAll": "View All",
       "noDiagnoses": "No diagnoses yet",
+      "noDiagnosesHint": "Use the camera button below to start",
       "firstScan": "Take First Scan",
       "tipLabel": "Tip",
       "tip1": "Rotate crops every season to prevent soil disease",
@@ -165,7 +166,23 @@
       "analysisFailed": "Analysis Failed",
       "analysisError": "Error during analysis. Please try again.",
       "notPlantImage": "This doesn't look like a plant photo. Please take a clear photo of your crop.",
-      "rateLimitReached": "You've reached your daily limit (10 scans). Try again tomorrow."
+      "rateLimitReached": "You've reached your daily limit (10 scans). Try again tomorrow.",
+      "selectCrop": "What crop are you scanning?",
+      "skipCrop": "I don't know / Skip",
+      "crops": {
+        "rice": "Rice (चावल)",
+        "wheat": "Wheat (गेहूँ)",
+        "cotton": "Cotton (कपास)",
+        "tomato": "Tomato (टमाटर)",
+        "potato": "Potato (आलू)",
+        "grape": "Grape (अंगूर)",
+        "maize": "Maize (मक्का)",
+        "mustard": "Mustard (सरसों)",
+        "chili": "Chili (मिर्च)",
+        "sugarcane": "Sugarcane (गन्ना)",
+        "onion": "Onion (प्याज)",
+        "soybean": "Soybean (सोयाबीन)"
+      }
     },
     "diagnosis": {
       "noResult": "No diagnosis found",
@@ -231,6 +248,12 @@
         "subtitle": "No disease detected",
         "tips": "Keep Your Crops Healthy",
         "defaultTip": "Keep monitoring your crops regularly"
+      },
+      "uncertain": {
+        "badge": "Uncertain",
+        "title": "Couldn't identify disease",
+        "message": "We couldn't identify a specific disease. Please try again with a clearer photo.",
+        "retake": "Retake Photo"
       }
     },
     "history": {

@@ -6,6 +6,21 @@ import { analyzePlantImage, saveDiagnosis, createThumbnail } from '@/services/di
 import { useToast } from '@/hooks/useToast';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
+const CROPS = [
+  { key: 'rice', emoji: '🌾' },
+  { key: 'wheat', emoji: '🌾' },
+  { key: 'cotton', emoji: '🌿' },
+  { key: 'tomato', emoji: '🍅' },
+  { key: 'potato', emoji: '🥔' },
+  { key: 'grape', emoji: '🍇' },
+  { key: 'maize', emoji: '🌽' },
+  { key: 'mustard', emoji: '🌻' },
+  { key: 'chili', emoji: '🌶️' },
+  { key: 'sugarcane', emoji: '🎋' },
+  { key: 'onion', emoji: '🧅' },
+  { key: 'soybean', emoji: '🫘' },
+] as const;
+
 export function ScanPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -13,11 +28,23 @@ export function ScanPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
+  const [selectedCrop, setSelectedCrop] = useState<string | undefined>();
+  const [cropSelected, setCropSelected] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showTip, setShowTip] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const handleCropSelect = useCallback((cropKey: string) => {
+    setSelectedCrop(cropKey);
+    setCropSelected(true);
+  }, []);
+
+  const handleSkipCrop = useCallback(() => {
+    setSelectedCrop(undefined);
+    setCropSelected(true);
+  }, []);
 
   const handleCapture = useCallback(() => {
     fileInputRef.current?.click();
@@ -54,7 +81,7 @@ export function ScanPage() {
 
     try {
       const [result, thumbnail] = await Promise.all([
-        analyzePlantImage(imageFile),
+        analyzePlantImage(imageFile, selectedCrop),
         createThumbnail(imageFile),
       ]);
 
@@ -101,7 +128,7 @@ export function ScanPage() {
     } finally {
       setIsAnalyzing(false);
     }
-  }, [imageFile, capturedImage, navigate, addToast, t]);
+  }, [imageFile, selectedCrop, capturedImage, navigate, addToast, t]);
 
   // Preview mode after capture
   if (capturedImage) {
@@ -175,6 +202,59 @@ export function ScanPage() {
               )}
             </div>
             <span className="text-sm font-bold">{t('farmer.scan.analyze')}</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Crop selection step (shown before camera)
+  if (!cropSelected) {
+    return (
+      <div className="fixed inset-0 bg-earth-50 z-50 flex flex-col">
+        {/* Header */}
+        <div className="flex items-center gap-3 px-4 py-4 bg-white border-b border-earth-200">
+          <button
+            onClick={() => navigate('/farmer')}
+            className="w-10 h-10 rounded-full flex items-center justify-center min-w-[48px] min-h-[48px]"
+            aria-label={t('common.back')}
+          >
+            <ArrowLeft className="w-5 h-5 text-earth-700" />
+          </button>
+          <h1 className="text-lg font-bold text-earth-900">
+            {t('farmer.scan.selectCrop')}
+          </h1>
+        </div>
+
+        {/* Crop grid */}
+        <div className="flex-1 overflow-y-auto px-4 py-4">
+          <div className="grid grid-cols-3 gap-3">
+            {CROPS.map((crop) => (
+              <button
+                key={crop.key}
+                onClick={() => handleCropSelect(crop.key)}
+                className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 min-h-[80px] transition-all duration-150 ${
+                  selectedCrop === crop.key
+                    ? 'border-primary-500 bg-primary-50'
+                    : 'border-earth-200 bg-white hover:border-primary-300'
+                }`}
+              >
+                <span className="text-2xl">{crop.emoji}</span>
+                <span className="text-sm font-semibold text-earth-800 text-center leading-tight">
+                  {t(`farmer.scan.crops.${crop.key}`)}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Skip button at bottom */}
+        <div className="px-4 py-4 bg-white border-t border-earth-200">
+          <button
+            onClick={handleSkipCrop}
+            className="w-full py-3 rounded-xl border-2 border-earth-300 text-earth-600 font-bold text-base min-h-[48px] transition-colors hover:bg-earth-50"
+          >
+            {t('farmer.scan.skipCrop')}
           </button>
         </div>
       </div>

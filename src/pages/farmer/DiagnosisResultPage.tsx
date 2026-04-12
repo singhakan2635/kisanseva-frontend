@@ -81,6 +81,75 @@ export function DiagnosisResultPage() {
   const imageDataUrl = state.imageDataUrl;
   const { primaryDiagnosis } = diagnosis;
 
+  // ── Uncertain result ────────────────────────────────────────────────────────
+  if (diagnosis.isUncertain) {
+    return (
+      <div className="min-h-screen bg-earth-50 pb-24">
+        {/* Hero with image */}
+        <div className="relative w-full h-[35vh] max-h-[350px] min-h-[180px] bg-earth-200 overflow-hidden">
+          {imageDataUrl ? (
+            <img src={imageDataUrl} alt="Uploaded crop" className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <Camera className="w-16 h-16 text-earth-400" />
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+          <button
+            onClick={() => navigate(-1)}
+            className="absolute top-4 left-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center z-10 min-w-[48px] min-h-[48px]"
+            aria-label={t('common.back', 'Back')}
+          >
+            <ArrowLeft className="w-5 h-5 text-white" />
+          </button>
+
+          <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold text-white bg-amber-500 mb-2">
+              {t('farmer.diagnosis.uncertain.badge', 'Uncertain')}
+            </span>
+            <h1 className="text-2xl font-bold text-white leading-tight">
+              {t('farmer.diagnosis.uncertain.title', "Couldn't identify disease")}
+            </h1>
+          </div>
+        </div>
+
+        {/* Amber uncertain banner */}
+        <div className="mx-4 -mt-4 relative z-20">
+          <div className="bg-white rounded-xl shadow-sm p-6 text-center border-2 border-amber-300">
+            <div className="w-16 h-16 mx-auto rounded-full bg-amber-100 flex items-center justify-center mb-4">
+              <AlertTriangle className="w-10 h-10 text-amber-600" />
+            </div>
+            <h2 className="text-xl font-bold text-amber-700 mb-2">
+              {t('farmer.diagnosis.uncertain.title', "Couldn't identify disease")}
+            </h2>
+            <p className="text-sm text-earth-600">
+              {t('farmer.diagnosis.uncertain.message', "We couldn't identify a specific disease. Please try again with a clearer photo.")}
+            </p>
+          </div>
+        </div>
+
+        {/* Retake photo prominent button */}
+        <div className="mx-4 mt-6">
+          <button
+            onClick={() => navigate('/farmer/scan')}
+            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-xl text-base flex items-center justify-center gap-2 transition-colors min-h-[48px]"
+          >
+            <Camera className="w-5 h-5" />
+            {t('farmer.diagnosis.uncertain.retake', 'Retake Photo')}
+          </button>
+        </div>
+
+        {/* Disclaimer */}
+        {diagnosis.disclaimer && (
+          <p className="mx-4 mt-4 text-[11px] text-earth-400 text-center leading-relaxed px-2">
+            {diagnosis.disclaimer}
+          </p>
+        )}
+      </div>
+    );
+  }
+
   // ── Healthy plant result ────────────────────────────────────────────────────
   if (diagnosis.isHealthy) {
     const handleShareHealthy = () => {
@@ -648,7 +717,7 @@ export function DiagnosisResultPage() {
                   {diagnosis.differentialDiagnoses.map((d, i) => (
                     <li key={i} className="flex items-center justify-between text-sm">
                       <span className="text-earth-700">{d.name}</span>
-                      <span className="text-earth-400 text-xs">{d.confidence}%</span>
+                      <span className="text-earth-400 text-xs">{Math.min(d.confidence, 100)}%</span>
                     </li>
                   ))}
                 </ul>
