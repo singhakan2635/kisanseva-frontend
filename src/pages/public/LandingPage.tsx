@@ -98,7 +98,7 @@ export function LandingPage() {
       {/* Content area */}
       <div className="flex-1 bg-earth-50 px-4 -mt-1 overflow-visible">
         {/* CTA Button — solid, no gradient */}
-        <div className="max-w-md mx-auto text-center -mt-2 overflow-visible">
+        <div className="max-w-md mx-auto text-center pt-4 overflow-visible">
           <button
             onClick={() => navigate('/register')}
             className="w-full max-w-xs min-h-[56px] bg-primary-600 hover:bg-primary-700 text-white text-lg font-bold rounded-2xl shadow-sm transition-colors duration-200 active:scale-[0.97]"
