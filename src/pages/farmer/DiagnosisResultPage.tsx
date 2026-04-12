@@ -5,6 +5,7 @@ import {
   ArrowLeft, Camera, Share2,
   Wrench, FlaskConical, Leaf, AlertTriangle,
   Shield, Bug, ChevronDown, ChevronUp, CheckCircle,
+  MapPin, ShoppingBag,
 } from 'lucide-react';
 import type { DiagnosisResult } from '@/services/diagnosisService';
 
@@ -16,10 +17,10 @@ interface LocationState {
 /* ─── Severity helpers ──────────────────────────────────────────────────────── */
 
 const SEVERITY_CONFIG = {
-  mild:     { color: 'bg-secondary-500', text: 'text-secondary-500', position: 15 },
-  moderate: { color: 'bg-accent-500',    text: 'text-accent-500',    position: 40 },
-  severe:   { color: 'bg-primary-500',   text: 'text-primary-500',   position: 65 },
-  critical: { color: 'bg-red-600',       text: 'text-red-600',       position: 90 },
+  mild:     { color: 'bg-secondary-500', text: 'text-secondary-500', position: 15, simpleColor: 'bg-yellow-400' },
+  moderate: { color: 'bg-accent-500',    text: 'text-accent-500',    position: 40, simpleColor: 'bg-yellow-500' },
+  severe:   { color: 'bg-primary-500',   text: 'text-primary-500',   position: 65, simpleColor: 'bg-red-500' },
+  critical: { color: 'bg-red-600',       text: 'text-red-600',       position: 90, simpleColor: 'bg-red-700' },
 } as const;
 
 type Severity = keyof typeof SEVERITY_CONFIG;
@@ -52,6 +53,7 @@ export function DiagnosisResultPage() {
 
   const isHindi = i18n.language?.startsWith('hi');
 
+  const [showDetails, setShowDetails] = useState(false);
   const [symptomsExpanded, setSymptomsExpanded] = useState(false);
   const [expandedTreatment, setExpandedTreatment] = useState<string | null>(null);
 
@@ -194,10 +196,27 @@ export function DiagnosisResultPage() {
   const severity = primaryDiagnosis.severity as Severity;
   const sevConfig = SEVERITY_CONFIG[severity] || SEVERITY_CONFIG.mild;
   const sevLabel = t(`farmer.diagnosis.severity.${severity}`);
+  const simpleSevLabel = t(`farmer.diagnosis.simpleSeverity.${severity}`, sevLabel);
   const diseaseName = isHindi
     ? (primaryDiagnosis.nameHi || primaryDiagnosis.name)
     : primaryDiagnosis.name;
   const cropType = t(`farmer.diagnosis.type.${primaryDiagnosis.type}`);
+
+  // Pick ONE recommended treatment for simple view
+  // Prefer first chemical treatment, fallback to first mechanical
+  const simpleChemical = diagnosis.treatments.chemical[0];
+  const simpleMechanical = diagnosis.treatments.mechanical[0];
+  const simpleTreatmentText = simpleChemical
+    ? simpleChemical.name
+    : simpleMechanical || null;
+
+  // Get trade names for the simple view chemical treatment (from pesticides)
+  const simplePesticideMatch = simpleChemical
+    ? diagnosis.recommendedPesticides.find(
+        (p) => p.name.toLowerCase().includes(simpleChemical.name.toLowerCase().split(' ')[0])
+      ) || diagnosis.recommendedPesticides[0]
+    : null;
+  const simpleTradeNames = simplePesticideMatch?.tradeName ?? [];
 
   // Symptoms: show max 4, expand for rest
   const MAX_SYMPTOMS = 4;
@@ -205,7 +224,7 @@ export function DiagnosisResultPage() {
   const visibleSymptoms = symptomsExpanded ? allSymptoms : allSymptoms.slice(0, MAX_SYMPTOMS);
   const hasMoreSymptoms = allSymptoms.length > MAX_SYMPTOMS;
 
-  // Build treatment data map for cards
+  // Build treatment data map for cards (used in detailed view)
   const treatmentData: Record<string, { summary: string; items: React.ReactNode }> = {};
 
   if (diagnosis.treatments.mechanical.length > 0) {
@@ -333,233 +352,333 @@ export function DiagnosisResultPage() {
             {diseaseName}
           </h1>
 
-          {/* Crop type + scientific name */}
+          {/* Crop type (no scientific name in hero — keep simple for farmers) */}
           <div className="flex items-center gap-2 mt-1">
             <span className="text-sm text-white/80 font-medium">{cropType}</span>
-            {primaryDiagnosis.scientificName && (
-              <>
-                <span className="text-white/40">|</span>
-                <span className="text-xs text-white/50 italic">{primaryDiagnosis.scientificName}</span>
-              </>
-            )}
           </div>
         </div>
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════════════
-         2. Severity Indicator Bar
+         2. SIMPLE VIEW — Severity + Summary + One Treatment
          ══════════════════════════════════════════════════════════════════════════ */}
+
+      {/* Simple Severity Indicator */}
       <div className="mx-4 -mt-4 relative z-20">
         <div className="bg-white rounded-xl shadow-sm p-4">
-          <p className="text-xs font-semibold text-earth-500 uppercase tracking-wide mb-3">
-            {t('farmer.diagnosis.severityLevel', 'Severity Level')}
-          </p>
-
-          {/* Gradient bar */}
-          <div className="relative h-3 rounded-full overflow-visible">
-            {/* Background gradient */}
-            <div
-              className="absolute inset-0 rounded-full"
-              style={{
-                background: 'linear-gradient(to right, #6F8A57, #D1A24E, #C47A3E, #C75B39, #9B2C2C)',
-              }}
-            />
-
-            {/* White dot marker */}
-            <div
-              className="absolute top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white border-[3px] border-earth-800 shadow-md transition-all duration-500 z-10"
-              style={{ left: `calc(${sevConfig.position}% - 10px)` }}
-            />
-          </div>
-
-          {/* Active severity label centered under dot */}
-          <div className="relative mt-2 h-5">
-            <span
-              className={`absolute text-xs font-bold ${sevConfig.text} transition-all duration-500`}
-              style={{ left: `${sevConfig.position}%`, transform: 'translateX(-50%)' }}
-            >
-              {sevLabel}
-            </span>
+          <div className="flex items-center gap-3">
+            <div className={`w-12 h-12 rounded-full ${sevConfig.simpleColor} flex items-center justify-center flex-shrink-0`}>
+              <AlertTriangle className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p className="text-lg font-bold text-earth-900">{simpleSevLabel}</p>
+              <p className="text-xs text-earth-500">{cropType}</p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════════════════════════════════════
-         3. Symptoms (collapsible)
-         ══════════════════════════════════════════════════════════════════════════ */}
-      {allSymptoms.length > 0 && (
+      {/* Farmer Summary */}
+      {diagnosis.farmerSummary && (
+        <div className="mx-4 mt-4">
+          <div className="bg-white rounded-xl shadow-sm p-4">
+            <p className="text-base text-earth-800 leading-relaxed">
+              {diagnosis.farmerSummary}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Simple Treatment — What to Do */}
+      {simpleTreatmentText && (
         <div className="mx-4 mt-4">
           <div className="bg-white rounded-xl shadow-sm p-4">
             <h2 className="text-base font-bold text-earth-900 mb-3">
-              {t('farmer.diagnosis.symptoms')}
+              {t('farmer.diagnosis.whatToDo')}
             </h2>
-            <ul className="space-y-2.5">
-              {visibleSymptoms.map((symptom, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <Bug className="w-4 h-4 text-severity-severe flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-earth-700 leading-snug">{symptom}</span>
-                </li>
-              ))}
-            </ul>
-            {hasMoreSymptoms && (
-              <button
-                onClick={() => setSymptomsExpanded(!symptomsExpanded)}
-                className="mt-3 text-sm font-semibold text-primary-600 flex items-center gap-1 min-h-[48px]"
-              >
-                {symptomsExpanded
-                  ? t('common.showLess', 'Show less')
-                  : t('common.showMore', `Show ${allSymptoms.length - MAX_SYMPTOMS} more`)}
-                {symptomsExpanded
-                  ? <ChevronUp className="w-4 h-4" />
-                  : <ChevronDown className="w-4 h-4" />}
-              </button>
+
+            {/* Treatment name */}
+            <div className="flex items-start gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                <FlaskConical className="w-4 h-4 text-orange-600" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-earth-900">{simpleTreatmentText}</p>
+                {simpleChemical && (
+                  <p className="text-xs text-earth-500 mt-0.5">
+                    {t('farmer.diagnosis.howToApply')}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Trade names — what to ask for at the shop */}
+            {simpleTradeNames.length > 0 && (
+              <div className="bg-earth-50 rounded-lg p-3 mb-3">
+                <p className="text-xs font-semibold text-earth-500 mb-1">
+                  <ShoppingBag className="w-3 h-3 inline mr-1" />
+                  {t('farmer.diagnosis.askForAtShop')}
+                </p>
+                <p className="text-sm font-bold text-earth-900">
+                  {simpleTradeNames.join(', ')}
+                </p>
+              </div>
             )}
+
+            {/* Find shop near me button */}
+            <a
+              href="https://www.google.com/maps/search/agricultural+shop+near+me"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl text-sm transition-colors min-h-[48px]"
+            >
+              <MapPin className="w-5 h-5" />
+              {t('farmer.diagnosis.findShopNearMe')}
+            </a>
           </div>
         </div>
       )}
 
       {/* ══════════════════════════════════════════════════════════════════════════
-         4. Treatment Cards (horizontal scroll)
+         3. "More Details" Toggle
          ══════════════════════════════════════════════════════════════════════════ */}
-      {availableCards.length > 0 && (
-        <div className="mt-4">
-          <h2 className="text-base font-bold text-earth-900 px-4 mb-3">
-            {t('farmer.diagnosis.treatment')}
-          </h2>
+      <div className="mx-4 mt-4">
+        <button
+          onClick={() => setShowDetails(!showDetails)}
+          className="w-full flex items-center justify-center gap-2 bg-white rounded-xl shadow-sm p-4 text-sm font-bold text-primary-600 transition-colors hover:bg-primary-50 min-h-[48px]"
+        >
+          {showDetails ? t('farmer.diagnosis.hideDetails') : t('farmer.diagnosis.moreDetails')}
+          {showDetails ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+        </button>
+      </div>
 
-          <div
-            ref={scrollRef}
-            className="flex gap-3 overflow-x-auto px-4 pb-2 snap-x snap-mandatory scrollbar-hide"
-            style={{ WebkitOverflowScrolling: 'touch' }}
-          >
-            {availableCards.map((card) => {
-              const Icon = card.icon;
-              const data = treatmentData[card.key];
-              const isExpanded = expandedTreatment === card.key;
-
-              return (
-                <button
-                  key={card.key}
-                  onClick={() => setExpandedTreatment(isExpanded ? null : card.key)}
-                  className={`flex-shrink-0 w-36 snap-start bg-white rounded-xl shadow-sm p-4 text-left transition-all min-h-[48px] ${
-                    isExpanded ? 'ring-2 ring-primary-400' : ''
-                  }`}
-                >
-                  {/* Icon circle */}
-                  <div className={`w-10 h-10 rounded-full ${card.iconBg} flex items-center justify-center mb-3`}>
-                    <Icon className="w-5 h-5" />
-                  </div>
-
-                  {/* Label */}
-                  <p className="text-xs font-bold text-earth-900 mb-1">
-                    {t(card.labelKey)}
-                  </p>
-
-                  {/* Summary */}
-                  <p className="text-[11px] text-earth-500 leading-snug line-clamp-2">
-                    {data.summary}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Expanded treatment detail */}
-          {expandedTreatment && treatmentData[expandedTreatment] && (
-            <div className="mx-4 mt-3 bg-white rounded-xl shadow-sm p-4 animate-in fade-in slide-in-from-top-2 duration-200">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-bold text-earth-900">
-                  {t(TREATMENT_CARDS.find(c => c.key === expandedTreatment)!.labelKey)}
-                </h3>
-                <button
-                  onClick={() => setExpandedTreatment(null)}
-                  className="text-earth-400 min-w-[48px] min-h-[48px] flex items-center justify-center"
-                >
-                  <ChevronUp className="w-4 h-4" />
-                </button>
+      {/* ══════════════════════════════════════════════════════════════════════════
+         4. DETAILED VIEW (hidden by default)
+         ══════════════════════════════════════════════════════════════════════════ */}
+      {showDetails && (
+        <>
+          {/* Scientific name */}
+          {primaryDiagnosis.scientificName && (
+            <div className="mx-4 mt-4">
+              <div className="bg-white rounded-xl shadow-sm p-4">
+                <p className="text-xs text-earth-400 uppercase tracking-wide mb-1">Scientific Name</p>
+                <p className="text-sm italic text-earth-700">{primaryDiagnosis.scientificName}</p>
               </div>
-              {treatmentData[expandedTreatment].items}
             </div>
           )}
-        </div>
-      )}
 
-      {/* ══════════════════════════════════════════════════════════════════════════
-         5. Chemical Treatment Detail (pesticides table)
-         ══════════════════════════════════════════════════════════════════════════ */}
-      {diagnosis.recommendedPesticides.length > 0 && (
-        <div className="mx-4 mt-4">
-          <div className="bg-white rounded-xl shadow-sm p-4">
-            <h2 className="text-base font-bold text-earth-900 mb-3">
-              {t('farmer.diagnosis.recommendedPesticides')}
-            </h2>
+          {/* Full Severity Bar */}
+          <div className="mx-4 mt-4">
+            <div className="bg-white rounded-xl shadow-sm p-4">
+              <p className="text-xs font-semibold text-earth-500 uppercase tracking-wide mb-3">
+                {t('farmer.diagnosis.severityLevel', 'Severity Level')}
+              </p>
 
-            <div className="space-y-4">
-              {diagnosis.recommendedPesticides.map((p, i) => (
-                <div key={i} className={`${i > 0 ? 'border-t border-earth-100 pt-4' : ''}`}>
-                  {/* Pesticide name */}
-                  <p className="text-sm font-bold text-earth-900">{p.name}</p>
+              {/* Gradient bar */}
+              <div className="relative h-3 rounded-full overflow-visible">
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: 'linear-gradient(to right, #6F8A57, #D1A24E, #C47A3E, #C75B39, #9B2C2C)',
+                  }}
+                />
+                <div
+                  className="absolute top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white border-[3px] border-earth-800 shadow-md transition-all duration-500 z-10"
+                  style={{ left: `calc(${sevConfig.position}% - 10px)` }}
+                />
+              </div>
 
-                  {/* Trade names */}
-                  {p.tradeName.length > 0 && (
-                    <p className="text-xs text-earth-400 mt-0.5">
-                      {p.tradeName.join(', ')}
-                    </p>
-                  )}
-
-                  {/* Dosage grid */}
-                  <div className="grid grid-cols-2 gap-2 mt-2">
-                    <div className="bg-earth-50 rounded-lg px-3 py-2">
-                      <p className="text-[10px] text-earth-400 uppercase tracking-wide">{t('farmer.diagnosis.perLiter')}</p>
-                      <p className="text-sm font-semibold text-earth-800 mt-0.5">{p.dosage.perLiter}</p>
-                    </div>
-                    <div className="bg-earth-50 rounded-lg px-3 py-2">
-                      <p className="text-[10px] text-earth-400 uppercase tracking-wide">{t('farmer.diagnosis.perAcre')}</p>
-                      <p className="text-sm font-semibold text-earth-800 mt-0.5">{p.dosage.perAcre}</p>
-                    </div>
-                  </div>
-
-                  {/* Safety precautions */}
-                  {p.safetyPrecautions.length > 0 && (
-                    <div className="mt-2">
-                      {p.safetyPrecautions.map((s, j) => (
-                        <p key={j} className="text-xs text-earth-500 flex items-start gap-1.5 mt-1">
-                          <Shield className="w-3 h-3 text-severity-severe flex-shrink-0 mt-0.5" />
-                          {s}
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
+              <div className="relative mt-2 h-5">
+                <span
+                  className={`absolute text-xs font-bold ${sevConfig.text} transition-all duration-500`}
+                  style={{ left: `${sevConfig.position}%`, transform: 'translateX(-50%)' }}
+                >
+                  {sevLabel}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+
+          {/* Symptoms (collapsible) */}
+          {allSymptoms.length > 0 && (
+            <div className="mx-4 mt-4">
+              <div className="bg-white rounded-xl shadow-sm p-4">
+                <h2 className="text-base font-bold text-earth-900 mb-3">
+                  {t('farmer.diagnosis.symptoms')}
+                </h2>
+                <ul className="space-y-2.5">
+                  {visibleSymptoms.map((symptom, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <Bug className="w-4 h-4 text-severity-severe flex-shrink-0 mt-0.5" />
+                      <span className="text-sm text-earth-700 leading-snug">{symptom}</span>
+                    </li>
+                  ))}
+                </ul>
+                {hasMoreSymptoms && (
+                  <button
+                    onClick={() => setSymptomsExpanded(!symptomsExpanded)}
+                    className="mt-3 text-sm font-semibold text-primary-600 flex items-center gap-1 min-h-[48px]"
+                  >
+                    {symptomsExpanded
+                      ? t('common.showLess', 'Show less')
+                      : t('common.showMore', `Show ${allSymptoms.length - MAX_SYMPTOMS} more`)}
+                    {symptomsExpanded
+                      ? <ChevronUp className="w-4 h-4" />
+                      : <ChevronDown className="w-4 h-4" />}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Treatment Cards (horizontal scroll) */}
+          {availableCards.length > 0 && (
+            <div className="mt-4">
+              <h2 className="text-base font-bold text-earth-900 px-4 mb-3">
+                {t('farmer.diagnosis.treatment')}
+              </h2>
+
+              <div
+                ref={scrollRef}
+                className="flex gap-3 overflow-x-auto px-4 pb-2 snap-x snap-mandatory scrollbar-hide"
+                style={{ WebkitOverflowScrolling: 'touch' }}
+              >
+                {availableCards.map((card) => {
+                  const Icon = card.icon;
+                  const data = treatmentData[card.key];
+                  const isExpanded = expandedTreatment === card.key;
+
+                  return (
+                    <button
+                      key={card.key}
+                      onClick={() => setExpandedTreatment(isExpanded ? null : card.key)}
+                      className={`flex-shrink-0 w-36 snap-start bg-white rounded-xl shadow-sm p-4 text-left transition-all min-h-[48px] ${
+                        isExpanded ? 'ring-2 ring-primary-400' : ''
+                      }`}
+                    >
+                      <div className={`w-10 h-10 rounded-full ${card.iconBg} flex items-center justify-center mb-3`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <p className="text-xs font-bold text-earth-900 mb-1">
+                        {t(card.labelKey)}
+                      </p>
+                      <p className="text-[11px] text-earth-500 leading-snug line-clamp-2">
+                        {data.summary}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Expanded treatment detail */}
+              {expandedTreatment && treatmentData[expandedTreatment] && (
+                <div className="mx-4 mt-3 bg-white rounded-xl shadow-sm p-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-sm font-bold text-earth-900">
+                      {t(TREATMENT_CARDS.find(c => c.key === expandedTreatment)!.labelKey)}
+                    </h3>
+                    <button
+                      onClick={() => setExpandedTreatment(null)}
+                      className="text-earth-400 min-w-[48px] min-h-[48px] flex items-center justify-center"
+                    >
+                      <ChevronUp className="w-4 h-4" />
+                    </button>
+                  </div>
+                  {treatmentData[expandedTreatment].items}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Chemical Treatment Detail (pesticides table) */}
+          {diagnosis.recommendedPesticides.length > 0 && (
+            <div className="mx-4 mt-4">
+              <div className="bg-white rounded-xl shadow-sm p-4">
+                <h2 className="text-base font-bold text-earth-900 mb-3">
+                  {t('farmer.diagnosis.recommendedPesticides')}
+                </h2>
+
+                <div className="space-y-4">
+                  {diagnosis.recommendedPesticides.map((p, i) => (
+                    <div key={i} className={`${i > 0 ? 'border-t border-earth-100 pt-4' : ''}`}>
+                      <p className="text-sm font-bold text-earth-900">{p.name}</p>
+
+                      {p.tradeName.length > 0 && (
+                        <p className="text-xs text-earth-400 mt-0.5">
+                          {p.tradeName.join(', ')}
+                        </p>
+                      )}
+
+                      <div className="grid grid-cols-2 gap-2 mt-2">
+                        <div className="bg-earth-50 rounded-lg px-3 py-2">
+                          <p className="text-[10px] text-earth-400 uppercase tracking-wide">{t('farmer.diagnosis.perLiter')}</p>
+                          <p className="text-sm font-semibold text-earth-800 mt-0.5">{p.dosage.perLiter}</p>
+                        </div>
+                        <div className="bg-earth-50 rounded-lg px-3 py-2">
+                          <p className="text-[10px] text-earth-400 uppercase tracking-wide">{t('farmer.diagnosis.perAcre')}</p>
+                          <p className="text-sm font-semibold text-earth-800 mt-0.5">{p.dosage.perAcre}</p>
+                        </div>
+                      </div>
+
+                      {p.safetyPrecautions.length > 0 && (
+                        <div className="mt-2">
+                          {p.safetyPrecautions.map((s, j) => (
+                            <p key={j} className="text-xs text-earth-500 flex items-start gap-1.5 mt-1">
+                              <Shield className="w-3 h-3 text-severity-severe flex-shrink-0 mt-0.5" />
+                              {s}
+                            </p>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Differential Diagnoses */}
+          {diagnosis.differentialDiagnoses.length > 0 && (
+            <div className="mx-4 mt-4">
+              <div className="bg-white rounded-xl shadow-sm p-4">
+                <h2 className="text-base font-bold text-earth-900 mb-3">
+                  {t('farmer.diagnosis.otherPossibilities')}
+                </h2>
+                <ul className="space-y-2">
+                  {diagnosis.differentialDiagnoses.map((d, i) => (
+                    <li key={i} className="flex items-center justify-between text-sm">
+                      <span className="text-earth-700">{d.name}</span>
+                      <span className="text-earth-400 text-xs">{d.confidence}%</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Prevention Tips */}
+          {diagnosis.preventionTips.length > 0 && (
+            <div className="mx-4 mt-4">
+              <div className="bg-white rounded-xl shadow-sm p-4">
+                <h2 className="text-base font-bold text-earth-900 mb-3">
+                  {t('farmer.diagnosis.preventionTips')}
+                </h2>
+                <ul className="space-y-2.5">
+                  {diagnosis.preventionTips.map((tip, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <Shield className="w-4 h-4 text-primary-600 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm text-earth-700 leading-snug">{tip}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       {/* ══════════════════════════════════════════════════════════════════════════
-         6. Prevention Tips
-         ══════════════════════════════════════════════════════════════════════════ */}
-      {diagnosis.preventionTips.length > 0 && (
-        <div className="mx-4 mt-4">
-          <div className="bg-white rounded-xl shadow-sm p-4">
-            <h2 className="text-base font-bold text-earth-900 mb-3">
-              {t('farmer.diagnosis.preventionTips')}
-            </h2>
-            <ul className="space-y-2.5">
-              {diagnosis.preventionTips.map((tip, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <Shield className="w-4 h-4 text-primary-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-earth-700 leading-snug">{tip}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-
-      {/* ══════════════════════════════════════════════════════════════════════════
-         7. Disclaimer
+         5. Disclaimer
          ══════════════════════════════════════════════════════════════════════════ */}
       {diagnosis.disclaimer && (
         <p className="mx-4 mt-4 text-[11px] text-earth-400 text-center leading-relaxed px-2">
@@ -568,7 +687,7 @@ export function DiagnosisResultPage() {
       )}
 
       {/* ══════════════════════════════════════════════════════════════════════════
-         8. Sticky Bottom Action Bar
+         6. Sticky Bottom Action Bar
          ══════════════════════════════════════════════════════════════════════════ */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-earth-200 z-40">
         <div className="flex items-center gap-3 max-w-lg mx-auto px-4 py-3">

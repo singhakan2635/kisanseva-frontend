@@ -1,4 +1,5 @@
 import { apiClient } from './api';
+import i18n from '@/i18n';
 import type { ApiResponse } from '@/types';
 
 // ─── Types matching backend DiagnosisResult ──────────────────────────────────
@@ -40,6 +41,7 @@ export interface DiagnosisResult {
   };
   recommendedPesticides: RecommendedPesticide[];
   preventionTips: string[];
+  farmerSummary?: string;
   sampleImages: Array<{ url: string; caption: string }>;
   disclaimer: string;
 }
@@ -139,6 +141,7 @@ export async function analyzePlantImage(
   const formData = new FormData();
   formData.append('image', imageFile);
   if (cropName) formData.append('cropName', cropName);
+  formData.append('language', i18n.language || 'en');
 
   const res = await apiClient<ApiResponse<DiagnosisResult>>(
     '/diagnosis/analyze',
