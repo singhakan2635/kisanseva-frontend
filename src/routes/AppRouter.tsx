@@ -54,7 +54,7 @@ function ScrollToTop() {
 function NavigationProgress() {
   const { pathname } = useLocation();
   const [visible, setVisible] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     setVisible(true);
