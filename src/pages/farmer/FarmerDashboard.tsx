@@ -9,8 +9,18 @@ import type { ApiResponse } from '@/types';
 interface WeatherData {
   city: string;
   temp: number;
+  feelsLike: number;
+  humidity: number;
   description: string;
   icon: string;
+  windSpeed: number;
+  pressure: number;
+}
+
+interface DiseaseRiskData {
+  risk: 'low' | 'moderate' | 'high';
+  diseases: string[];
+  advisory: string;
 }
 
 interface DiagnosisHistoryItem {
@@ -56,14 +66,62 @@ export function FarmerDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [diseaseRisk, setDiseaseRisk] = useState<DiseaseRiskData | null>(null);
   const [recentDiagnoses, setRecentDiagnoses] = useState<DiagnosisHistoryItem[]>([]);
 
   const isHindi = i18n.language?.startsWith('hi');
 
   useEffect(() => {
-    apiClient<ApiResponse<WeatherData>>('/weather/current')
-      .then((res) => setWeather(res.data))
-      .catch(() => {/* weather is optional */});
+    // Fetch weather using cached location or request geolocation
+    const LOCATION_KEY = 'fasalrakshak_location';
+
+    function fetchWeatherByCoords(lat: number, lon: number): void {
+      apiClient<ApiResponse<WeatherData>>(`/weather/current?lat=${lat}&lon=${lon}`)
+        .then((res) => setWeather(res.data))
+        .catch(() => {/* weather is optional */});
+
+      apiClient<ApiResponse<{ weather: WeatherData; risk: DiseaseRiskData }>>(`/weather/disease-risk?lat=${lat}&lon=${lon}`)
+        .then((res) => setDiseaseRisk(res.data.risk))
+        .catch(() => {/* disease risk is optional */});
+    }
+
+    const cached = localStorage.getItem(LOCATION_KEY);
+    if (cached) {
+      try {
+        const { lat, lon } = JSON.parse(cached) as { lat: number; lon: number };
+        fetchWeatherByCoords(lat, lon);
+      } catch {
+        localStorage.removeItem(LOCATION_KEY);
+      }
+    }
+
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = parseFloat(pos.coords.latitude.toFixed(4));
+          const lon = parseFloat(pos.coords.longitude.toFixed(4));
+          localStorage.setItem(LOCATION_KEY, JSON.stringify({ lat, lon }));
+          // If we didn't have cached location, fetch now; if we did, this refreshes with accurate coords
+          if (!cached) {
+            fetchWeatherByCoords(lat, lon);
+          }
+        },
+        () => {
+          // Geolocation denied or unavailable — if no cached location, try city fallback
+          if (!cached) {
+            apiClient<ApiResponse<WeatherData>>('/weather/current?city=Delhi')
+              .then((res) => setWeather(res.data))
+              .catch(() => {/* weather is optional */});
+          }
+        },
+        { timeout: 10000, maximumAge: 600000 }
+      );
+    } else if (!cached) {
+      // No geolocation support and no cache — city fallback
+      apiClient<ApiResponse<WeatherData>>('/weather/current?city=Delhi')
+        .then((res) => setWeather(res.data))
+        .catch(() => {/* weather is optional */});
+    }
 
     apiClient<ApiResponse<DiagnosisHistoryItem[]>>('/diagnoses?limit=3&sort=-createdAt')
       .then((res) => setRecentDiagnoses(res.data))
@@ -99,12 +157,51 @@ export function FarmerDashboard() {
         {weather && (
           <div className="text-right">
             <p className="text-2xl font-bold text-earth-900">
-              {weather.temp}° {getWeatherEmoji(weather.description)}
+              {weather.temp}{'\u00B0'} {getWeatherEmoji(weather.description)}
             </p>
             <p className="text-sm text-earth-500">{weather.city}</p>
+            <p className="text-xs text-earth-400">{weather.humidity}% {t('farmer.dashboard.humidity', 'humidity')}</p>
           </div>
         )}
       </div>
+
+      {/* Disease Risk Alert */}
+      {diseaseRisk && diseaseRisk.risk !== 'low' && (
+        <div className={`rounded-2xl p-4 border ${
+          diseaseRisk.risk === 'high'
+            ? 'bg-red-50 border-red-200'
+            : 'bg-amber-50 border-amber-200'
+        }`}>
+          <div className="flex items-start gap-3">
+            <span className="text-xl flex-shrink-0">
+              {diseaseRisk.risk === 'high' ? '\u26A0\uFE0F' : '\uD83D\uDCA1'}
+            </span>
+            <div>
+              <p className={`text-sm font-bold ${
+                diseaseRisk.risk === 'high' ? 'text-red-800' : 'text-amber-800'
+              }`}>
+                {t('farmer.dashboard.diseaseRiskTitle', 'Weather Disease Alert')}
+                {' \u2014 '}
+                {diseaseRisk.risk === 'high'
+                  ? t('farmer.dashboard.highRisk', 'High Risk')
+                  : t('farmer.dashboard.moderateRisk', 'Moderate Risk')}
+              </p>
+              {diseaseRisk.diseases.length > 0 && (
+                <p className={`text-xs mt-1 ${
+                  diseaseRisk.risk === 'high' ? 'text-red-700' : 'text-amber-700'
+                }`}>
+                  {t('farmer.dashboard.possibleDiseases', 'Possible')}: {diseaseRisk.diseases.join(', ')}
+                </p>
+              )}
+              <p className={`text-xs mt-1 ${
+                diseaseRisk.risk === 'high' ? 'text-red-600' : 'text-amber-600'
+              }`}>
+                {diseaseRisk.advisory}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* B. Hero Illustration + Camera CTA */}
       <div className="relative bg-secondary-50 rounded-2xl p-6 flex flex-col items-center border border-secondary-200">
